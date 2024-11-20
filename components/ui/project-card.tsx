@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { MagicCard } from "@/components/ui/magic-card";
 import { ArrowUpRight } from "lucide-react";
