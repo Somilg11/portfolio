@@ -16,7 +16,7 @@ const IndexPage = () => {
           <Projects />
           <Experience />
         </Container>
-        <div className="flex flex-end fixed right-0 bottom-0 p-3">
+        <div className="flex flex-end fixed right-0 bottom-0 p-3 z-10">
           <span className="border border-slate-500 p-3 rounded-full cursor-pointer bg-slate-950">
             <a
               href="http://buymeacoffee.com/gsomil93q"

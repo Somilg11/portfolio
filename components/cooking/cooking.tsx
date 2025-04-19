@@ -64,7 +64,7 @@ const Cooking = () => {
                       >
                         leetcode: 
                         <p className="whitespace-pre-wrap text-8xl font-medium tracking-tighter text-black dark:text-white">
-      <NumberTicker value={1622} />
+      <NumberTicker value={1659} />
     </p>
                       </a>
                     </p>
@@ -112,7 +112,7 @@ const Cooking = () => {
       <div className="mb-5">
         <h1>tools 🧰</h1>
         <VelocityScroll
-          text="Typescript ⭕ React ⭕ Next.js ⭕ Tailwind CSS ⭕ Vercel ⭕ Node ⭕ Express ⭕ MongoDB ⭕ Firebase ⭕ Postgres ⭕ Prisma ⭕"
+          text="Typescript ⭕ React ⭕ Next.js ⭕ Tailwind CSS ⭕ Vercel ⭕ Node ⭕ Express ⭕ MongoDB ⭕ Postgres ⭕ Prisma ⭕ Docker ⭕ Redis ⭕ Github ⭕ CI/CD ⭕ Socket.io ⭕ AWS ⭕"
           default_velocity={5}
           className="font-display text-center text-xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-xl leading-[-5rem]"
         />
