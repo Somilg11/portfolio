@@ -21,7 +21,7 @@ export const projectData = [
     description: "a place to make github more easy to use",
     url: "https://github.com/Somilg11/bithub",
     live: "https://bithub.vercel.app",
-    tech: ["Next.js", "GitHub API", "TailwindCSS"],
+    tech: ["React", "GitHub API", "TailwindCSS"],
   },
   {
     image: "/erasor.png",
@@ -32,12 +32,20 @@ export const projectData = [
     tech: ["Next.js", "Kinde", "Excalidraw", "Convex"],
   },
   {
+    image: "/medivision.png",
+    title: "Medical-AI",
+    description: "An intelligent diagnostic assistant for analyzing medical images (X-rays, CT scans, MRIs, and ultrasounds), generating detailed reports, and offering follow-up actions such as doctor search and chat-based explanations.",
+    url: "https://github.com/Somilg11/Medical-Assistant-1",
+    live: "https://github.com/Somilg11/Medical-Assistant-1",
+    tech: ["Python", "FastAPI", "Gemini", "React", "TypeScript", "NMIT-Hack🏆"],
+  },
+  {
     image: "/interact.png",
     title: "interact",
     description: "Interview sehuduling application",
     url: "https://github.com/Somilg11/interact",
     live: "https://interact-coral.vercel.app/", // example, adjust accordingly
-    tech: ["Next.js", "Monaco", "Convex", "Clerk", "Stream.io"],
+    tech: ["Next.js", "Monaco", "Convex", "Clerk", "Stream.io", "TypeScript", "Tailwind"],
   },
   {
     image: "/enhance.png",
@@ -61,7 +69,7 @@ export const projectData = [
     description: "traffic control optimization using Reinforced Learning, simulating in SUMO (landing interface)",
     url: "https://github.com/Somilg11/fikc.",
     live: "https://fikc.vercel.app/",
-    tech: ["Python", "SUMO", "RL", "Streamlit"],
+    tech: ["Python", "SUMO", "RL", "Streamlit", "SIH-24⭐"],
   },
   {
     image: "https://github.com/Somilg11/rentwheel/raw/main/ss1.png",

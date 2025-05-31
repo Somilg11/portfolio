@@ -64,7 +64,7 @@ const Cooking = () => {
                       >
                         leetcode: 
                         <p className="whitespace-pre-wrap text-8xl font-medium tracking-tighter text-black dark:text-white">
-      <NumberTicker value={1659} />
+      <NumberTicker value={1791} />
     </p>
                       </a>
                     </p>
@@ -80,8 +80,8 @@ const Cooking = () => {
       </div>
       <hr />
       <div className="text-sm mb-4">
-        <h1 className="mt-3">ORM Integration</h1>
-        <p className="text-slate-500">I&apos;m diving deep into Object-Relational Mapping (ORM) to streamline database interactions in my projects.</p>
+        <h1 className="mt-3">Automation</h1>
+        <p className="text-slate-500">I&apos;m diving deep into automation tools and frameworks to streamline repetitive tasks and improve efficiency in my projects.</p>
         <h1 className="mt-3">Web3 & Decentralized Technologies</h1>
         <p className="text-slate-500">I&apos;m learning about the Web3 ecosystem, focusing on blockchain integration and building decentralized applications (dApps).</p>
       </div>
