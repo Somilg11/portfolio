@@ -30,10 +30,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const contentHtml = processedContent.toString();
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-2">{data.title}</h1>
-      <p className="text-sm text-slate-500 mb-6">{data.date}</p>
-      <article className="prose prose-invert" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+    <main className="max-w-3xl mx-5 md:mx-auto my-10">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-xl border border-slate-800 px-4 py-3 relative">
+        <div className="absolute left-4 top-3 flex gap-1">
+          <span className="inline-block w-2 h-2 rounded-full bg-red-400"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-green-400"></span>
+        </div>
+        <div className="flex items-center gap-4 mt-5 mb-2">
+          {/* Space between dots and title */}
+          <span className="text-base font-semibold text-slate-100 tracking-tight">{data.title}</span>
+        </div>
+        <p className="text-xs text-slate-400 mb-6">{data.date}</p>
+        <article className="prose prose-invert" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+      </div>
     </main>
   );
 }

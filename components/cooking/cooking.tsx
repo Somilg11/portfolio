@@ -36,7 +36,7 @@ const Cooking = () => {
                       >
                         codechef: 
                         <p className="whitespace-pre-wrap text-8xl font-medium tracking-tighter text-black dark:text-white">
-      <NumberTicker value={1676} />
+      <NumberTicker value={1703} />
     </p>
                       </a>
                     </p>
@@ -58,13 +58,13 @@ const Cooking = () => {
                     <p className="inline-flex gap-2 text-base">
                       <SquareChevronRight className="text-yellow-500" />
                       <a
-                        href="https://leetcode.com/u/strangecode93/"
+                        href="https://leetcode.com/u/coding_bear/"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         leetcode: 
                         <p className="whitespace-pre-wrap text-8xl font-medium tracking-tighter text-black dark:text-white">
-      <NumberTicker value={1791} />
+      <NumberTicker value={1622} />
     </p>
                       </a>
                     </p>
@@ -82,8 +82,8 @@ const Cooking = () => {
       <div className="text-sm mb-4">
         <h1 className="mt-3">Automation</h1>
         <p className="text-slate-500">I&apos;m diving deep into automation tools and frameworks to streamline repetitive tasks and improve efficiency in my projects.</p>
-        <h1 className="mt-3">Web3 & Decentralized Technologies</h1>
-        <p className="text-slate-500">I&apos;m learning about the Web3 ecosystem, focusing on blockchain integration and building decentralized applications (dApps).</p>
+  <h1 className="mt-3">Generative AI</h1>
+  <p className="text-slate-500">Exploring generative AI models and tools to create intelligent applications, automate content generation, and build innovative user experiences with technologies like Gemini, OpenAI, and LangChain.</p>
       </div>
       <h1>services 🛠️</h1>
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 mb-5">

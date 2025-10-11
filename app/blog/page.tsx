@@ -23,18 +23,28 @@ export default function BlogPage() {
   });
 
   return (
-    <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Blog 📝</h1>
-      <ul className="space-y-4">
-        {posts.map(({ slug, frontmatter }) => (
-          <li key={slug} className="border-b pb-2">
-            <Link href={`/blog/${slug}`} className="text-xl text-blue-600 hover:underline">
-              {frontmatter.title}
-            </Link>
-            <p className="text-sm text-slate-500">{frontmatter.description}</p>
-          </li>
-        ))}
-      </ul>
+    <main className="max-w-3xl mx-5 md:mx-auto my-10">
+  <div className="rounded-2xl bg-gradient-to-br  min-h-screen from-zinc-950 via-zinc-900 to-zinc-950 shadow-xl border border-zinc-800 px-4 py-3 relative">
+        <div className="absolute left-4 top-3 flex gap-1">
+          <span className="inline-block w-2 h-2 rounded-full bg-red-400"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-green-400"></span>
+        </div>
+        <div className="flex items-center gap-4 mt-5 mb-6">
+          {/* Space between dots and title */}
+          <span className="text-base font-semibold text-zinc-100 tracking-tight">Blog <span className="text-sm">📝</span></span>
+        </div>
+        <ul className="space-y-4">
+          {posts.map(({ slug, frontmatter }) => (
+            <li key={slug} className="rounded-xl bg-zinc-900/80 shadow border border-zinc-800 px-4 py-3">
+              <Link href={`/blog/${slug}`} className="text-lg text-zinc-100 font-semibold hover:text-blue-400 transition-colors">
+                {frontmatter.title}
+              </Link>
+              <p className="text-xs text-zinc-400 mt-1">{frontmatter.description}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </main>
   );
 }
