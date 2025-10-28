@@ -42,19 +42,14 @@ export default function ProfileCard() {
     })
     .replace(",", "");
 
-  const handleResumeDownload = () => {
-    const link = document.createElement("a");
-    link.href = "/resume.pdf"; // make sure the resume is inside /public/
-    link.download = "Somil_Resume.pdf";
-    link.click();
-  };
+  
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-zinc-900/80 via-zinc-950/80 to-zinc-900/80 shadow-2xl border border-zinc-800 px-7 md:px-10 py-7 md:py-5 w-full backdrop-blur-md h-full flex flex-col">
       {/* Top section */}
       <div className="flex items-start gap-4">
         <img
-          src="/myprofileimage.jpg"
+          src="/myprofileimage.png"
           alt="SG"
           className="w-[72px] h-[72px] rounded-full border-2 border-zinc-700 object-cover"
         />
@@ -69,13 +64,9 @@ export default function ProfileCard() {
 
             {/* Resume hover */}
             <div
-              className="relative text-zinc-400 text-sm cursor-pointer group select-none"
-              onClick={handleResumeDownload}
+              className="relative text-zinc-400 text-sm cursor-pointer"
             >
               夜
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-white bg-zinc-800 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                Resume
-              </span>
             </div>
           </div>
 

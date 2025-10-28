@@ -1,10 +1,8 @@
 "use client";
 
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import ExperienceAchievements from "../experience/experience";
 import Link from "next/link";
-import { Circle } from "lucide-react";
+import { FileText } from "lucide-react";
 
 // 🎨 React Icons Imports
 import { SiSpotify, SiGithub, SiDiscord, SiNotion, SiOpenai } from "react-icons/si";
@@ -141,9 +139,9 @@ export default function ToolsBoard() {
                 </div>
 
                 {/* Center text */}
-                {/* <div className="relative flex items-center justify-center h-full">
-                  <span className="text-white text-lg font-semibold tracking-wide">Visit Blog</span>
-                </div> */}
+                <div className="relative flex items-center justify-center h-full">
+                  <span className="text-white text-3xl font-semibold tracking-wide">ブログ</span>
+                </div>
               </div>
             </Link>
 
@@ -170,26 +168,51 @@ export default function ToolsBoard() {
 
           {/* Right column */}
           <div className="flex flex-col gap-4">
-            {/* Popup Card */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <div className="cursor-pointer rounded-2xl overflow-hidden border border-zinc-800 bg-black shadow hover:scale-[1.02] transition-transform">
-                  <div className="aspect-[4/3] bg-gradient-to-b from-zinc-900 via-black to-zinc-900 flex items-center justify-center">
-                    <div className="w-40 h-40 md:w-52 md:h-52 rounded-full bg-gradient-to-b from-zinc-200 to-zinc-700 shadow-2xl">
-                      <div className="flex items-center justify-center h-full text-black tracking-tighter text-4xl font-bold font-mono">
-                        <Circle size={72} />
+            {/* Resume/CV Download Button */}
+            <div
+              className="flex items-center justify-center gap-2 bg-zinc-900/70 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-3 text-zinc-200 hover:text-white hover:bg-zinc-800/70 transition-all duration-300 shadow-md hover:shadow-zinc-800/40 cursor-pointer select-none"
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = "/resume.pdf";
+                link.download = "Somil_Resume.pdf";
+                link.click();
+              }}
+            >
+              <FileText size={18} />
+              <span className="font-extrabold">_RESUME.</span>
+            </div>
+
+            {/* Excellence Tabs - Like LINKS style */}
+            <div className="rounded-2xl overflow-hidden border border-zinc-800 bg-black shadow">
+              {/* Tab Header */}
+              <div className="px-4 py-3 border-b border-zinc-800">
+                {/* <div className="text-lg md:text-xl font-semibold text-zinc-100 mb-2">Excellence</div> */}
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href="/experience" className="block">
+                    <div className="p-2 md:p-3 rounded-xl bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors cursor-pointer overflow-hidden">
+                      <div className="text-lg sm:text-xl md:text-2xl lg:text-lg font-extrabold leading-none tracking-tighter text-zinc-100">
+                        <div>EXPER</div>
+                        <div>IENCE.</div>
                       </div>
                     </div>
-                  </div>
-                  <div className="px-4 py-2 text-[11px] text-zinc-400">
-                    from <span className="lowercase">excellences</span>: <span className="font-mono">2023 onwards</span>
-                  </div>
+                  </Link>
+                  
+                  <Link href="/achievements" className="block">
+                    <div className="p-2 md:p-3 rounded-xl bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors cursor-pointer overflow-hidden">
+                      <div className="text-lg sm:text-xl md:text-2xl lg:text-lg font-extrabold leading-none tracking-tighter text-zinc-100">
+                        <div>ACHIEV</div>
+                        <div>EMENT.</div>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-zinc-950/95 border-zinc-800 backdrop-blur-xl rounded-2xl p-0 overflow-hidden">
-                <ExperienceAchievements />
-              </DialogContent>
-            </Dialog>
+              </div>
+              
+              {/* Footer */}
+              <div className="px-4 py-2 text-[11px] text-zinc-400">
+                from <span className="lowercase">excellences</span>: <span className="font-mono">2023 onwards</span>
+              </div>
+            </div>
 
             {/* Quote */}
             <div className="px-2">
@@ -201,6 +224,24 @@ export default function ToolsBoard() {
               <div className="aspect-square bg-zinc-900">
                 <img src="/anime.jpg" alt="Card Image" className="w-full h-full object-cover" />
               </div>
+            </div>
+
+            {/* CP Tab for Competitive Programming */}
+            <div className="mt-2">
+              <a
+                href="https://codolio.com/profile/strangecodes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex items-center gap-3 justify-center shadow hover:bg-zinc-800/80 transition-colors cursor-pointer"
+              >
+                <img
+                  src="/myprofileimage2.png"
+                  alt="SG"
+                  className="w-8 h-8 rounded-full border border-zinc-700 object-cover"
+                />
+                <span className="text-2xl md:text-3xl font-extrabold leading-none tracking-tighter text-zinc-100">CP</span>
+                <span className="text-xs md:text-sm text-zinc-400 font-semibold">Codolio Profile</span>
+              </a>
             </div>
           </div>
         </div>
