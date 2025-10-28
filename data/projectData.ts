@@ -6,6 +6,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/recipieFinder",
     live: "https://eatit-somil.vercel.app",
     tech: ["React", "Edamam API", "TailwindCSS"],
+  category: ["web"],
   },
   {
     image: "https://github.com/Somilg11/rentwheel/raw/main/ss1.png",
@@ -14,6 +15,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/rentwheel",
     live: "https://rentwheel.vercel.app",
     tech: ["React", "Node.js", "MongoDB", "JWT"],
+  category: ["web"],
   },
   {
     image: "/fikc.png",
@@ -22,6 +24,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/fikc.",
     live: "https://fikc.vercel.app/",
     tech: ["Python", "SUMO", "RL", "Streamlit", "SIH-24⭐"],
+  category: ["ai", "hackathon"],
   },
   {
     image: "/codeweb.png",
@@ -30,6 +33,7 @@ export const projectData = [
     url: "https://github.com/strangecode93/codewebfrontend",
     live: "https://codeweb-frontend.vercel.app",
     tech: ["React", "Monaco", "Tailwind", "Socket.IO"],
+  category: ["web"],
   },
   {
     image: "/enhance.png",
@@ -38,6 +42,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/ENHANCE",
     live: "https://enhance-weld.vercel.app/",
     tech: ["React", "Tailwind", "Axios", "PicWish API"],
+  category: ["ai"],
   },
   {
     image: "/interact.png",
@@ -46,6 +51,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/interact",
     live: "https://interact-coral.vercel.app/",
     tech: ["Next.js", "Monaco", "Convex", "Clerk", "Stream.io", "TypeScript", "Tailwind"],
+  category: ["web"],
   },
   {
     image: "/medivision.png",
@@ -54,6 +60,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/Medical-Assistant-1",
     live: "https://github.com/Somilg11/Medical-Assistant-1",
     tech: ["Python", "FastAPI", "Gemini", "React", "TypeScript", "NMIT-Hack🏆"],
+  category: ["ai", "hackathon"],
   },
   {
     image: "/erasor.png",
@@ -62,6 +69,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/erasor_clone",
     live: "https://erasor.vercel.app",
     tech: ["Next.js", "Kinde", "Excalidraw", "Convex"],
+  category: ["web"],
   },
   {
     image: "https://github.com/Somilg11/bithub/raw/main/bithubss.png",
@@ -70,6 +78,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/bithub",
     live: "https://bithub.vercel.app",
     tech: ["React", "GitHub API", "TailwindCSS"],
+  category: ["web"],
   },
   {
     image: "/agile.png",
@@ -78,6 +87,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/agile",
     live: "https://agile-kohl.vercel.app/",
     tech: ["Next.js", "Neon", "Clerk", "Zod", "Prisma", "hello-pangea/dnd", "React-md"],
+  category: ["web"],
   },
   {
     image: "/cake.png",
@@ -86,6 +96,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/cake_frontend",
     live: "https://cake-frontend-eta.vercel.app/",
     tech: ["MERN", "Tailwind", "Axios", "Socket.IO", "Highlight.js", "Redis", "WebContainers"],
+  category: ["web", "ai"],
   },
   {
     image: "/quickdesk.png",
@@ -94,6 +105,7 @@ export const projectData = [
     url: "https://github.com/Somilg11/odoo-hack",
     live: "https://odoo-hack-seven.vercel.app/",
     tech: ["Next.js", "Tailwind", "TypeScript", "MongoDB", "odoo-hack🏁"],
+  category: ["hackathon", "web"],
   },
   {
     image: "/medifind.png",
@@ -102,5 +114,6 @@ export const projectData = [
     url: "https://github.com/Somilg11/medi-inventory",
     live: "https://medi-inventory.vercel.app/",
     tech: ["Next.js", "Tailwind", "TypeScript", "MongoDB", "JWT", "nextgen-hack🏁"],
+  category: ["hackathon", "ai"],
   },
 ];

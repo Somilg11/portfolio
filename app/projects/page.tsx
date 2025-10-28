@@ -19,12 +19,25 @@ export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   type Project = typeof projectData[number];
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const categories = [
+    { key: "all", label: "All" },
+    { key: "web", label: "Web" },
+    { key: "ai", label: "AI" },
+    { key: "hackathon", label: "Hackathon" },
+    { key: "core", label: "Core" },
+  ];
 
   const filteredProjects = [...projectData]
     .reverse()
-    .filter((project) =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    .filter((project) => {
+      const categories = Array.isArray(project.category) ? project.category : [project.category];
+      return (
+        (selectedCategory === "all" || categories.includes(selectedCategory)) &&
+        project.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
 
   return (
     <Section>
@@ -40,42 +53,62 @@ export default function ProjectsPage() {
           />
         </div>
 
+        {/* Category Tabs */}
+        <div className="mb-6 flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat.key}
+              className={`px-4 py-1 rounded-full font-semibold text-sm border transition-colors duration-200 ${selectedCategory === cat.key ? "bg-blue-600 text-white border-blue-600" : "bg-zinc-900 text-zinc-300 border-zinc-700 hover:bg-zinc-800"}`}
+              onClick={() => setSelectedCategory(cat.key)}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
         {/* Bento Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[150px] sm:auto-rows-[180px] md:auto-rows-[200px]">
-          {filteredProjects.map((project, index) => (
-            <div
-              key={index}
-              onClick={() => setSelectedProject(project)}
-              className={`relative cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-md group shadow-md hover:scale-[1.03] transition-all overflow-hidden`}
-              style={{
-                gridColumn:
-                  index % 7 === 0
-                    ? "span 2"
-                    : index % 11 === 0
-                    ? "span 3"
-                    : "span 1",
-                gridRow:
-                  index % 5 === 0
-                    ? "span 2"
-                    : index % 9 === 0
-                    ? "span 1"
-                    : "span 1",
-              }}
-            >
-              {/* Double Circle Effect */}
-              <div className="absolute -bottom-12 -right-12 w-32 h-32 rounded-full bg-blue-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
-              <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-blue-600/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out delay-75"></div>
-
-              <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-3">
-                <span className="text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight leading-tight">
-                  {project.title}
-                </span>
-              </div>
-
-              {/* Hover overlay effect */}
-              <div className="absolute inset-0 rounded-2xl bg-zinc-800/0 group-hover:bg-zinc-800/30 transition-colors" />
+          {filteredProjects.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
+              <span className="text-2xl md:text-3xl font-extrabold text-zinc-400 mb-2 uppercase">_Coming Soon.</span>
+              <span className="text-sm text-zinc-500">No projects available in this category yet.</span>
             </div>
-          ))}
+          ) : (
+            filteredProjects.map((project, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedProject(project)}
+                className={`relative cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-md group shadow-md hover:scale-[1.03] transition-all overflow-hidden`}
+                style={{
+                  gridColumn:
+                    index % 7 === 0
+                      ? "span 2"
+                      : index % 11 === 0
+                      ? "span 3"
+                      : "span 1",
+                  gridRow:
+                    index % 5 === 0
+                      ? "span 2"
+                      : index % 9 === 0
+                      ? "span 1"
+                      : "span 1",
+                }}
+              >
+                {/* Double Circle Effect */}
+                <div className="absolute -bottom-12 -right-12 w-32 h-32 rounded-full bg-blue-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
+                <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-blue-600/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out delay-75"></div>
+
+                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-3">
+                  <span className="text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-100 tracking-tight leading-tight">
+                    {project.title}
+                  </span>
+                </div>
+
+                {/* Hover overlay effect */}
+                <div className="absolute inset-0 rounded-2xl bg-zinc-800/0 group-hover:bg-zinc-800/30 transition-colors" />
+              </div>
+            ))
+          )}
         </div>
 
         {/* Dialog */}
