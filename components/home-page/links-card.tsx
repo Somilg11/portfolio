@@ -17,7 +17,7 @@ export default function LinksCard() {
       target="_blank"
       rel="noopener noreferrer"
       title={title}
-      className="bg-zinc-900/70 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-4 flex items-center justify-center text-zinc-200 hover:text-white hover:bg-zinc-800/70 transition-all duration-300 shadow-md hover:shadow-zinc-800/40"
+      className="bg-zinc-900/70 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-4 flex items-center justify-center text-zinc-200 hover:text-white hover:bg-zinc-800/70 transition-all duration-300 shadow-md hover:shadow-zinc-800/40 shrink-0 min-w-[56px] min-h-[56px]"
     >
       {children}
     </a>

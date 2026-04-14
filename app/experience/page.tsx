@@ -3,18 +3,19 @@
 import React from "react";
 import { Container, Section } from "@/components/craft";
 import { Badge } from "@/components/ui/badge";
-import { Globe, ExternalLink, Calendar, MapPin, Briefcase } from "lucide-react";
+import { TechBadge } from "@/components/tech-badge";
+import { motion } from "framer-motion";
+import { MapPin, Calendar, Globe, ExternalLink, Briefcase } from "lucide-react";
 
-// Your actual work experience data
 const experienceData = [
   {
     id: 1,
-    title: "Software Engineer Intern",
+    title: "SDE Intern",
     company: "Creova.in",
     type: "Completed",
     duration: "May 2025 - July 2025",
     location: "Remote",
-    technologies: ["React", "Node.js", "Express", "MongoDB", "JavaScript", "REST APIs"],
+    technologies: ["React", "Node.js", "Express", "MongoDB", "JavaScript", "Rest APIs"],
     description: [
       "Worked on full-stack projects, contributing to both backend logic and frontend development while improving system performance.",
       "Collaborated with senior developers to implement new features and optimize existing functionality.",
@@ -29,9 +30,9 @@ const experienceData = [
     title: "Backend Lead",
     company: "DevC - College Club",
     type: "Working",
-    duration: "Current",
-    location: "College Campus",
-    technologies: ["Node.js", "Express", "MongoDB", "PostgreSQL", "Docker", "AWS"],
+    duration: "Aug 2024 - Present",
+    location: "College Campus (On-Site)",
+    technologies: ["Nodejs", "Express", "MongoDB", "PostgreSQL", "Docker", "AWS"],
     description: [
       "Leading backend architecture and development for multiple college projects including alumni and event management portals.",
       "Mentoring junior developers and establishing coding standards for the team.",
@@ -44,107 +45,91 @@ const experienceData = [
   }
 ];
 
-const getStatusBadge = (type: string) => {
-  switch (type) {
-    case "Working":
-      return <Badge className="bg-green-600 hover:bg-green-700 text-white">● Working</Badge>;
-    case "Completed":
-      return <Badge variant="secondary">Completed</Badge>;
-    default:
-      return <Badge variant="outline">{type}</Badge>;
-  }
-};
-
-const TechnologyBadge = ({ tech }: { tech: string }) => (
-  <Badge 
-    variant="outline" 
-    className="text-xs bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-  >
-    {tech}
-  </Badge>
-);
-
 export default function ExperiencePage() {
   return (
-    <Section className="min-h-screen bg-black text-white">
-      <Container className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <Section className="min-h-screen bg-black text-white selection:bg-zinc-800 selection:text-white">
+      <Container className="max-w-4xl mx-auto px-6 py-12 sm:py-24">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4">_EXPERIENCE.</h1>
-          <p className="text-lg sm:text-xl text-zinc-400 font-mono">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16"
+        >
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Work Experience</h1>
+          <p className="text-zinc-400 text-lg">
             My work experiences across different companies and roles.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Experiences List */}
-        <div className="mb-12">
-          <h2 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-zinc-300">
-            All Experiences <span className="text-zinc-500">({experienceData.length} experiences)</span>
-          </h2>
-
-          <div className="space-y-6 sm:space-y-8">
-            {experienceData.map((experience) => (
-              <div
-                key={experience.id}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 sm:p-6 lg:p-8 hover:bg-zinc-900/70 transition-colors"
-              >
-                {/* Header with company info and status */}
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 sm:mb-6 gap-4">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    {/* Company Logo Placeholder */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400" />
-                    </div>
-                    
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                        {experience.title}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                        <span className="text-zinc-400 text-sm sm:text-base">{experience.company}</span>
-                        <div className="flex items-center gap-2 text-sm text-zinc-500">
-                          <Globe className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
-                        </div>
-                        {getStatusBadge(experience.type)}
-                      </div>
-                    </div>
+        {/* Experience List */}
+        <div className="space-y-20">
+          {experienceData.map((exp, i) => (
+            <motion.div
+              key={exp.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative"
+            >
+              {/* Top Row: Company & Title & Status & Date */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl font-extrabold text-white tracking-tight">{exp.company}</span>
+                    {exp.type === "Working" && (
+                      <Badge className="bg-zinc-950 border border-emerald-500/50 text-emerald-400 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full select-none">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                        Working
+                      </Badge>
+                    )}
                   </div>
-
-                  <div className="text-left sm:text-right text-zinc-400 text-sm">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span>{experience.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span>{experience.location}</span>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-zinc-400 font-medium">
+                    <span className="text-zinc-200">{exp.title}</span>
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <MapPin size={14} className="text-zinc-500" />
+                      {exp.location}
                     </div>
                   </div>
                 </div>
 
-                {/* Technologies */}
-                <div className="mb-4 sm:mb-6">
-                  <h4 className="text-sm font-medium text-zinc-300 mb-3">Technologies & Tools</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {experience.technologies.map((tech, index) => (
-                      <TechnologyBadge key={index} tech={tech} />
-                    ))}
+                <div className="flex flex-col md:items-end gap-1 text-zinc-500 text-sm font-medium">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={14} />
+                    <span>{exp.duration}</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Description */}
-                <div className="space-y-2 sm:space-y-3">
-                  {experience.description.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <span className="text-zinc-500 mt-1 sm:mt-2 text-sm">•</span>
-                      <p className="text-zinc-300 leading-relaxed text-sm sm:text-base">{item}</p>
-                    </div>
+              {/* Technologies Section */}
+              <div className="mb-8">
+                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Technologies & Tools</h4>
+                <div className="flex flex-wrap gap-3">
+                  {exp.technologies.map((tech) => (
+                    <TechBadge key={tech} tech={tech} />
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Description Section */}
+              <div>
+                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">What I've done</h4>
+                <ul className="space-y-4">
+                  {exp.description.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3 group">
+                      <span className="mt-[7px] w-1.5 h-1.5 rounded-sm bg-zinc-700 group-hover:bg-zinc-500 transition-colors shrink-0"></span>
+                      <p className="text-zinc-300 leading-relaxed">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Separator */}
+              {i !== experienceData.length - 1 && (
+                <div className="absolute -bottom-10 left-0 right-0 h-px bg-zinc-900"></div>
+              )}
+            </motion.div>
+          ))}
         </div>
       </Container>
     </Section>

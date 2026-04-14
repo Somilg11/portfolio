@@ -1,8 +1,15 @@
 ---
 title: "Git & GitHub Basics"
-description: "Learnings of Github"
+description: "Everything you need to know about version control and collaboration."
 date: "2025-04-19"
 slug: "git-github"
+tags: ["Git", "GitHub", "DevOps", "CI/CD"]
+tldr:
+  - "Git is for version control, GitHub is an SCM."
+  - "Basic commands: init, status, add, commit, push."
+  - "Branching strategies are key for collaboration."
+  - "Git Hooks can prevent bad commits."
+  - "GitHub Actions automates deployment to AWS S3."
 ---
 
 ### Topics covered

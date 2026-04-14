@@ -1,8 +1,16 @@
 ---
 title: "Networking"
-description: "Networking basics"
+description: "Networking basics and AWS VPC setup"
 date: "2025-04-19"
 slug: "networking"
+tags: ["Networking", "AWS", "VPC", "Nginx"]
+tldr:
+  - "Computer networking connects devices to share resources."
+  - "The OSI model defines 7 layers of communication."
+  - "IPv4 is common, IPv6 is future-proof."
+  - "AWS VPC provides isolated network environments."
+  - "Nginx is a powerful web server and reverse proxy."
+  - "Load balancers distribute traffic for high availability."
 ---
 
 **What is computer network? Why its useful?**

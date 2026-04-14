@@ -3,18 +3,19 @@
 import React from "react";
 import { Container, Section } from "@/components/craft";
 import { Badge } from "@/components/ui/badge";
-import { Calendar } from "lucide-react";
+import { TechBadge } from "@/components/tech-badge";
+import { motion } from "framer-motion";
+import { Calendar, Trophy, Rocket, Code, Award } from "lucide-react";
 
-// Your actual achievements data
 const achievementsData = [
   {
     id: 1,
     title: "Finalist - SIH 2024",
     subtitle: "Smart India Hackathon 2024",
     year: "2024",
-    icon: "🥈",
-    type: "Competition",
-    technologies: ["Python", "SUMO", "Reinforcement Learning", "Streamlit"],
+    icon: <Trophy size={18} className="text-orange-400" />,
+    type: "Finalist",
+    technologies: ["Python", "Streamlit"],
     description: [
       "Developed a traffic control optimization system using Reinforced Learning, simulating in SUMO environment.",
       "Created an innovative solution for smart traffic management that reached the finals of India's largest hackathon.",
@@ -26,9 +27,9 @@ const achievementsData = [
     title: "Winner - NMIT Hacks 25",
     subtitle: "Hackathon Competition",
     year: "Winner",
-    icon: "🏆",
-    type: "Competition",
-    technologies: ["Python", "FastAPI", "Gemini AI", "React", "TypeScript"],
+    icon: <Award size={18} className="text-yellow-400" />,
+    type: "Winner",
+    technologies: ["Python", "FastAPI", "React", "TypeScript"],
     description: [
       "Won the NMIT Hackathon with the 'Medical-AI' project - an intelligent diagnostic assistant.",
       "Built a comprehensive system for analyzing medical images (X-rays, CT scans, MRIs, and ultrasounds).",
@@ -38,10 +39,10 @@ const achievementsData = [
   {
     id: 3,
     title: "Open Source Contributor",
-    subtitle: "Contributing to open source projects",
+    subtitle: "Active in Developer Community",
     year: "Active",
-    icon: "💻",
-    type: "Development",
+    icon: <Code size={18} className="text-blue-400" />,
+    type: "Contributor",
     technologies: ["JavaScript", "TypeScript", "React", "Node.js", "Python"],
     description: [
       "Actively contributing to various open source projects and maintaining personal repositories.",
@@ -51,12 +52,12 @@ const achievementsData = [
   },
   {
     id: 4,
-    title: "Multiple Hackathon Participations",
-    subtitle: "Various hackathons including odoo-hack and nextgen-hack",
+    title: "Hackathon Participations",
+    subtitle: "odoo-hack, nextgen-hack and more",
     year: "2023-2025",
-    icon: "🚀",
-    type: "Competition",
-    technologies: ["Full Stack", "MERN", "Next.js", "MongoDB", "TypeScript"],
+    icon: <Rocket size={18} className="text-purple-400" />,
+    type: "Participant",
+    technologies: ["JavaScript", "Nextjs", "MongoDB", "TypeScript"],
     description: [
       "Successfully participated in multiple hackathons including odoo-hack and nextgen-hack.",
       "Built projects like Quick Desk (ticket management system) and MediFind (medical inventory system).",
@@ -65,102 +66,89 @@ const achievementsData = [
   }
 ];
 
-const getTypeBadge = (type: string, year: string) => {
-  if (year === "Winner") {
-    return <Badge className="bg-yellow-600 hover:bg-yellow-700 text-white">🏆 Winner</Badge>;
-  }
-  switch (type) {
-    case "Competition":
-      return <Badge className="bg-orange-600 hover:bg-orange-700 text-white">Competition</Badge>;
-    case "Development":
-      return <Badge className="bg-blue-600 hover:bg-blue-700 text-white">● Active</Badge>;
-    default:
-      return <Badge variant="outline">{type}</Badge>;
-  }
-};
-
-const TechnologyBadge = ({ tech }: { tech: string }) => (
-  <Badge 
-    variant="outline" 
-    className="text-xs bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-  >
-    {tech}
-  </Badge>
-);
-
 export default function AchievementsPage() {
   return (
-    <Section className="min-h-screen bg-black text-white">
-      <Container className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <Section className="min-h-screen bg-black text-white selection:bg-zinc-800 selection:text-white">
+      <Container className="max-w-4xl mx-auto px-6 py-12 sm:py-24">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 uppercase">_Achievements.</h1>
-          <p className="text-lg sm:text-xl text-zinc-400 font-mono">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16"
+        >
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight uppercase">Achievements</h1>
+          <p className="text-zinc-400 text-lg">
             My achievements and recognitions across competitions and projects.
           </p>
-        </div>
+        </motion.div>
 
         {/* Achievements List */}
-        <div className="mb-12">
-          <h2 className="text-xl sm:text-2xl font-semibold mb-6 sm:mb-8 text-zinc-300">
-            All Achievements <span className="text-zinc-500">({achievementsData.length} achievements)</span>
-          </h2>
-
-          <div className="space-y-6 sm:space-y-8">
-            {achievementsData.map((achievement) => (
-              <div
-                key={achievement.id}
-                className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 sm:p-6 lg:p-8 hover:bg-zinc-900/70 transition-colors"
-              >
-                {/* Header with achievement info and status */}
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 sm:mb-6 gap-4">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    {/* Achievement Icon */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0 text-lg sm:text-xl">
+        <div className="space-y-20">
+          {achievementsData.map((achievement, i) => (
+            <motion.div
+              key={achievement.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative"
+            >
+              {/* Top Row: Title & Subtitle & Badge & Year */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
                       {achievement.icon}
                     </div>
-                    
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                        {achievement.title}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                        <span className="text-zinc-400 text-sm sm:text-base">{achievement.subtitle}</span>
-                        {getTypeBadge(achievement.type, achievement.year)}
-                      </div>
-                    </div>
+                    <span className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{achievement.title}</span>
+                    {achievement.type === "Winner" && (
+                      <Badge className="bg-yellow-500/10 border border-yellow-500/50 text-yellow-500 px-2.5 py-0.5 rounded-full">
+                        Winner
+                      </Badge>
+                    )}
                   </div>
-
-                  <div className="text-left sm:text-right text-zinc-400 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span>{achievement.year}</span>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-zinc-400 font-medium">
+                    <span className="text-zinc-200">{achievement.subtitle}</span>
                   </div>
                 </div>
 
-                {/* Technologies */}
-                <div className="mb-4 sm:mb-6">
-                  <h4 className="text-sm font-medium text-zinc-300 mb-3">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {achievement.technologies.map((tech, index) => (
-                      <TechnologyBadge key={index} tech={tech} />
-                    ))}
+                <div className="flex flex-col md:items-end gap-1 text-zinc-500 text-sm font-medium">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={14} />
+                    <span>{achievement.year}</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Description */}
-                <div className="space-y-2 sm:space-y-3">
-                  {achievement.description.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <span className="text-zinc-500 mt-1 sm:mt-2 text-sm">•</span>
-                      <p className="text-zinc-300 leading-relaxed text-sm sm:text-base">{item}</p>
-                    </div>
+              {/* Technologies Section */}
+              <div className="mb-8">
+                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Core Technologies</h4>
+                <div className="flex flex-wrap gap-3">
+                  {achievement.technologies.map((tech) => (
+                    <TechBadge key={tech} tech={tech} />
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Description Section */}
+              <div>
+                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Impact & Contributions</h4>
+                <ul className="space-y-4">
+                  {achievement.description.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3 group">
+                      <span className="mt-[7px] w-1.5 h-1.5 rounded-sm bg-zinc-700 group-hover:bg-zinc-500 transition-colors shrink-0"></span>
+                      <p className="text-zinc-300 leading-relaxed font-normal">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Separator */}
+              {i !== achievementsData.length - 1 && (
+                <div className="absolute -bottom-10 left-0 right-0 h-px bg-zinc-900"></div>
+              )}
+            </motion.div>
+          ))}
         </div>
       </Container>
     </Section>
