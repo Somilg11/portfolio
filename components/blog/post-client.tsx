@@ -6,7 +6,15 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { ArrowLeft, Calendar, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function PostClientWrapper({ data, contentHtml }: { data: any, contentHtml: string }) {
+export interface PostData {
+  title: string;
+  description: string;
+  date: string;
+  tldr?: string[];
+  [key: string]: unknown;
+}
+
+export function PostClientWrapper({ data, contentHtml }: { data: PostData; contentHtml: string }) {
   const [copied, setCopied] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {

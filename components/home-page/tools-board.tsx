@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
@@ -102,7 +103,7 @@ export default function ToolsBoard() {
                     <div className="flex items-center gap-1.5 truncate">
                       <span className="w-1.5 text-right opacity-70">1</span>
                       <span className="bg-white/20 text-[7px] font-bold px-[3px] rounded text-white">E</span>
-                      <span className="truncate text-white font-medium group-hover:text-[#1DB954] transition-colors">God's Plan <span className="opacity-70 group-hover:text-[#1DB954]/70">· Drake</span></span>
+                      <span className="truncate text-white font-medium group-hover:text-[#1DB954] transition-colors">God&apos;s Plan <span className="opacity-70 group-hover:text-[#1DB954]/70">· Drake</span></span>
                     </div>
                     <div className="flex items-center gap-1.5 truncate">
                       <span className="w-1.5 text-right opacity-70">2</span>

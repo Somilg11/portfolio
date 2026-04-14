@@ -5,7 +5,7 @@ import { Container, Section } from "@/components/craft";
 import { Badge } from "@/components/ui/badge";
 import { TechBadge } from "@/components/tech-badge";
 import { motion } from "framer-motion";
-import { MapPin, Calendar, Globe, ExternalLink, Briefcase } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 
 const experienceData = [
   {
@@ -113,7 +113,7 @@ export default function ExperiencePage() {
 
               {/* Description Section */}
               <div>
-                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">What I've done</h4>
+                <h4 className="text-[13px] font-bold text-zinc-500 uppercase tracking-widest mb-4">What I&apos;ve done</h4>
                 <ul className="space-y-4">
                   {exp.description.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 group">

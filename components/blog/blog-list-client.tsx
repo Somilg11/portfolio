@@ -6,7 +6,15 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export function BlogListClient({ posts }: { posts: any[] }) {
+interface BlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+}
+
+export function BlogListClient({ posts }: { posts: BlogPost[] }) {
   return (
     <div className="space-y-12">
       {posts.map((post, i) => (

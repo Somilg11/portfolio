@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { 
   SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress, SiFastapi, 
-  SiNpm, SiCloudflare, SiDocker, SiPostman, SiPostgresql, SiPrisma, 
+  SiNpm, SiCloudflare, SiDocker, SiPostgresql, SiPrisma, 
   SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiJavascript,
   SiTypescript, SiStreamlit, SiShadcnui, SiVercel, SiFigma
 } from "react-icons/si";

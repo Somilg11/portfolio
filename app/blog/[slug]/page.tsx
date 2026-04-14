@@ -4,7 +4,7 @@ import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
 import { notFound } from "next/navigation";
-import { PostClientWrapper } from "@/components/blog/post-client";
+import { PostClientWrapper, PostData } from "@/components/blog/post-client";
 
 interface BlogPostPageProps {
   params: { slug: string };
@@ -31,7 +31,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <PostClientWrapper 
-      data={data} 
+      data={data as PostData} 
       contentHtml={contentHtml} 
     />
   );
