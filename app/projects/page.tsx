@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ChevronDown, ChevronUp, ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { TechBadge } from "@/components/tech-badge";
 
 const cardGradients = [
   "from-amber-500/20 to-orange-500/20",
@@ -166,14 +167,9 @@ export default function ProjectsPage() {
                     </AnimatePresence>
 
                     {/* Tech Badges (Pushed to bottom) */}
-                    <div className="mt-auto pt-2 flex flex-wrap gap-2">
+                    <div className="mt-auto pt-4 flex flex-wrap gap-2">
                       {project.tech?.map((tech: string, i: number) => (
-                        <span
-                          key={i}
-                          className="px-2.5 py-1 text-xs font-medium bg-[#1c1c1c] text-zinc-300 rounded-md border border-zinc-800"
-                        >
-                          {tech}
-                        </span>
+                        <TechBadge key={`${tech}-${i}`} tech={tech} showName />
                       ))}
                     </div>
                   </div>
