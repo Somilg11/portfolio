@@ -78,6 +78,74 @@ body {
   scrollbar-width: none;
 }
 
+/* Background Container */
+.rain-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+.rain-bg-img {
+  position: absolute;
+  inset: 0;
+  background: url('/nightskybg.png') center/cover no-repeat;
+  transition: opacity 2s ease;
+  opacity: 1;
+}
+
+.rain-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: background 2s ease;
+}
+
+/* Rainy Theme */
+html.rainy {
+  background: #0a0f1a;
+  transition: background 1.5s ease;
+}
+
+html.rainy body,
+html.rainy main {
+  background: transparent !important;
+}
+
+html.rainy .rain-bg-img {
+  opacity: 0;
+}
+
+html.rainy .rain-bg-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+html.rainy .rain-bg-cloudy {
+  opacity: 1;
+}
+
+.rain-bg-cloudy {
+  position: absolute;
+  inset: 0;
+  background: url('/cloudebg.png') center/cover no-repeat;
+  opacity: 0;
+  transition: opacity 2s ease 0.5s;
+}
+
+html.rainy .cloud-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.03) 0%, transparent 40%);
+  animation: cloudDrift 20s ease-in-out infinite;
+}
+
+@keyframes cloudDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
 
 @layer base {
   * {

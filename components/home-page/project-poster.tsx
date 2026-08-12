@@ -7,14 +7,8 @@ export default function ProjectPoster() {
   return (
     <Link
       href="/projects"
-      className="relative rounded-2xl bg-purple-600/95 shadow-xl border border-purple-700 px-6 py-8 w-full text-left hover:scale-[1.01] transition-transform block overflow-hidden"
+      className="relative rounded-2xl bg-black shadow-xl border border-zinc-800 px-6 py-8 w-full text-left hover:scale-[1.01] transition-transform block overflow-hidden"
     >
-      {/* decorative icon top-left */}
-      {/* <div className="absolute left-5 top-5 text-purple-100/80" aria-hidden>
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 1v2" /><path d="M12 21v2" /><path d="M4.22 4.22l1.42 1.42" /><path d="M18.36 18.36l1.42 1.42" /><path d="M1 12h2" /><path d="M21 12h2" /><path d="M4.22 19.78l1.42-1.42" /><path d="M18.36 5.64l1.42-1.42" /><circle cx="12" cy="12" r="4" />
-        </svg>
-      </div> */}
       {/* concentric circles */}
       <div className="absolute right-[-30px] top-8 opacity-50">
         <div className="w-72 h-72 rounded-full bg-white/20" />

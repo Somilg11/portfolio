@@ -8,7 +8,15 @@ import ToolsBoard from "@/components/home-page/tools-board";
 
 const IndexPage = () => {
   return (
-    <Main className="min-h-screen bg-zinc-950 relative">
+    <Main className="min-h-screen relative">
+      {/* Rain theme backgrounds */}
+      <div className="rain-bg">
+        <div className="rain-bg-img" />
+        <div className="rain-bg-cloudy" />
+        <div className="rain-bg-overlay" />
+      </div>
+      <div className="cloud-overlay" />
+      
       <Section>
         <Container className="w-full max-w-[1400px] mx-auto px-2 md:px-8 py-2 md:py-6">
           <div className="flex flex-col md:grid md:grid-cols-[1fr_2fr_1fr] gap-8">

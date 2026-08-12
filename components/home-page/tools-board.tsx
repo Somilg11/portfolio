@@ -3,12 +3,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { FileText, Monitor, Play } from "lucide-react";
+import { FileText, Monitor } from "lucide-react";
 
 // 🎨 React Icons Imports
-import { SiSpotify, SiGithub, SiDiscord, SiNotion, SiOpenai } from "react-icons/si";
+import { SiSpotify, SiGithub, SiDiscord, SiNotion } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
-import { SiClaude } from "react-icons/si";
+import { SiClaudecode } from "react-icons/si";
+import { SiOpencode } from "react-icons/si";
 
 type RailItem = {
   label: string;
@@ -20,8 +21,8 @@ type RailItem = {
 const rail: RailItem[] = [
   { label: "VS Code", icon: <VscVscode size={22} />, link: "https://code.visualstudio.com/", hoverColor: "hover:text-sky-400" },
   { label: "Notion", icon: <SiNotion size={22} />, link: "https://www.notion.so/", hoverColor: "hover:text-white" },
-  { label: "ChatGPT", icon: <SiOpenai size={22} />, link: "https://chat.openai.com/", hoverColor: "hover:text-emerald-400" },
-  { label: "Claude", icon: <SiClaude size={22} />, link: "https://claude.ai", hoverColor: "hover:text-orange-400" },
+  { label: "Opencode", icon: <SiOpencode size={22} />, link: "https://www.opencode.ai", hoverColor: "hover:text-emerald-400" },
+  { label: "Claude", icon: <SiClaudecode size={22} />, link: "https://claude.ai", hoverColor: "hover:text-orange-400" },
   { label: "Spotify", icon: <SiSpotify size={22} />, link: "https://spotify.com/", hoverColor: "hover:text-green-500" },
   { label: "GitHub", icon: <SiGithub size={22} />, link: "https://github.com/", hoverColor: "hover:text-gray-200" },
   { label: "Discord", icon: <SiDiscord size={22} />, link: "https://discord.com/", hoverColor: "hover:text-indigo-400" },
@@ -29,10 +30,10 @@ const rail: RailItem[] = [
 
 export default function ToolsBoard() {
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-zinc-900/80 via-zinc-950/80 to-zinc-900/80 shadow-xl border border-zinc-800 px-4 py-4 md:px-5 md:py-5 backdrop-blur-md w-full h-full flex flex-col">
-      <div className="flex gap-4 grow overflow-hidden">
-        {/* Left Tool Rail */}
-        <div className="rounded-[20px] bg-zinc-950/70 border border-zinc-800 px-2 py-3 flex flex-col gap-2 w-[60px] min-w-[60px] items-center shadow-inner overflow-y-auto scrollbar-none">
+    <div className="rounded-2xl bg-black shadow-xl border border-zinc-800 px-4 py-4 md:px-5 md:py-5 w-full h-full flex flex-col">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 grow overflow-hidden">
+        {/* Left Tool Rail - Horizontal on mobile, vertical on desktop */}
+        <div className="rounded-[20px] bg-zinc-950/70 border border-zinc-800 px-2 py-2 md:py-3 flex flex-row md:flex-col gap-2 w-full md:w-[60px] md:min-w-[60px] items-center shadow-inner overflow-x-auto md:overflow-y-auto md:overflow-x-hidden scrollbar-none">
           {rail.map((r, i) => (
             <a
               key={i}
@@ -77,70 +78,52 @@ export default function ToolsBoard() {
                 </div>
               </Link>
 
-              {/* Compact Spotify Card */}
+              {/* Music Button - Vinyl Player */}
               <a
                 href="https://open.spotify.com/track/6DCZcSspjsKoFjzjrWoCdn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex p-2.5 gap-2.5 rounded-xl border border-zinc-800/50 shadow-md bg-[#2d302c] relative overflow-hidden h-[100px] transition-all duration-300 hover:scale-[1.05] group cursor-pointer"
+                className="flex items-center rounded-2xl h-[100px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer relative overflow-hidden group"
+                style={{ background: "linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)", boxShadow: "0 4px 15px rgba(0,0,0,0.4)" }}
               >
-                <SiSpotify size={14} className="absolute top-2.5 right-2.5 text-white/50 group-hover:text-[#1DB954] transition-colors" />
-                
-                <div className="relative shrink-0 w-[80px] h-[80px] rounded overflow-hidden shadow-md bg-zinc-800">
-                  <img 
-                    src="https://images.unsplash.com/photo-1566170272238-b6854199c126?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                    alt="Cover" 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                    <Play size={20} fill="white" className="text-white ml-0.5" />
-                  </div>
+                {/* Decorative circles following disk direction */}
+                <div className="absolute -left-16 -bottom-16 opacity-30">
+                  <div className="w-40 h-40 rounded-full border border-zinc-600" />
                 </div>
-                
-                <div className="flex flex-col justify-center flex-1 min-w-0 pr-4">
-                  {/* Track List */}
-                  <div className="flex flex-col gap-[1px] text-[9px] text-zinc-300 mb-1">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <span className="w-1.5 text-right opacity-70">1</span>
-                      <span className="bg-white/20 text-[7px] font-bold px-[3px] rounded text-white">E</span>
-                      <span className="truncate text-white font-medium group-hover:text-[#1DB954] transition-colors">God&apos;s Plan <span className="opacity-70 group-hover:text-[#1DB954]/70">· Drake</span></span>
-                    </div>
-                    <div className="flex items-center gap-1.5 truncate">
-                      <span className="w-1.5 text-right opacity-70">2</span>
-                      <span className="bg-white/20 text-[7px] font-bold px-[3px] rounded text-white">E</span>
-                      <span className="truncate group-hover:text-white transition-colors">Nonstop <span className="opacity-70">· Drake</span></span>
-                    </div>
-                    <div className="flex items-center gap-1.5 truncate">
-                      <span className="w-1.5 text-right opacity-70">3</span>
-                      <span className="bg-white/20 text-[7px] font-bold px-[3px] rounded text-white">E</span>
-                      <span className="truncate group-hover:text-white transition-colors">Elevate <span className="opacity-70">· Drake</span></span>
+                <div className="absolute -left-8 -bottom-8 opacity-20">
+                  <div className="w-24 h-24 rounded-full border border-zinc-600" />
+                </div>
+                {/* Vinyl disc - metallic */}
+                <div className="absolute -left-12 w-40 h-40 rounded-full" style={{ background: "radial-gradient(circle at 35% 35%, #444, #111 40%, #1a1a1a 60%, #222 80%, #111 100%)", boxShadow: "inset 0 0 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.1)" }}>
+                  {/* Grooves - realistic */}
+                  <div className="absolute inset-0 rounded-full" style={{ background: "repeating-radial-gradient(circle at center, transparent 0px, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 3px)" }} />
+                  {/* Light reflection */}
+                  <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)" }} />
+                  {/* Label */}
+                  <div className="absolute inset-12 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-purple-800" style={{ boxShadow: "inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.3)" }}>
+                    <div className="absolute inset-0 rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-zinc-950" />
                     </div>
                   </div>
-
-                  {/* Controls Row */}
-                  <div className="mt-auto flex items-end justify-between">
-                    <div>
-                      <div className="text-[10px] font-semibold text-white truncate w-[100px]">Scorpion</div>
-                      <button className="px-1.5 py-[1px] mt-0.5 bg-black/30 group-hover:bg-[#1DB954] rounded text-[8px] font-semibold text-white transition-colors duration-300">
-                        Play on Spotify
-                      </button>
-                    </div>
-                    <div className="w-5 h-5 bg-white group-hover:scale-110 group-hover:bg-[#1DB954] rounded-full flex items-center justify-center shrink-0 transition-all duration-300 shadow-md ml-5">
-                      <Play size={10} fill="currentColor" className="text-black ml-[1px]" />
-                    </div>
-                  </div>
+                  {/* Edge highlight */}
+                  <div className="absolute inset-0 rounded-full border border-zinc-500/20" />
+                </div>
+                {/* Equalizer bars */}
+                <div className="absolute right-3 bottom-3 flex items-end gap-[2px] opacity-40">
+                  <div className="w-1 bg-purple-500 rounded-t" style={{ height: "8px", animation: "bounce 0.5s ease-in-out infinite alternate" }} />
+                  <div className="w-1 bg-purple-400 rounded-t" style={{ height: "12px", animation: "bounce 0.7s ease-in-out infinite alternate" }} />
+                  <div className="w-1 bg-purple-500 rounded-t" style={{ height: "6px", animation: "bounce 0.4s ease-in-out infinite alternate" }} />
+                  <div className="w-1 bg-purple-400 rounded-t" style={{ height: "14px", animation: "bounce 0.6s ease-in-out infinite alternate" }} />
+                  <div className="w-1 bg-purple-500 rounded-t" style={{ height: "10px", animation: "bounce 0.5s ease-in-out infinite alternate" }} />
                 </div>
               </a>
 
               {/* Compact System Specs (Now flex-1 to fill vertical space) */}
-              <Link href="/" className="relative p-[1px] rounded-xl overflow-hidden group flex-1 shadow flex flex-col min-h-[90px] cursor-pointer">
-                {/* Spinning Neon Electron Background */}
-                <div className="absolute -inset-[100%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                
-                {/* Inner Card overlaying the border */}
-                <div className="relative flex flex-col p-2.5 rounded-xl bg-[#1b1c1e] h-full justify-between z-10">
+              <Link href="/" className="relative rounded-xl overflow-hidden group flex-1 shadow flex flex-col min-h-[90px] cursor-pointer">
+                {/* Inner Card - Black Metal */}
+                <div className="relative flex flex-col p-2.5 rounded-xl h-full justify-between z-10" style={{ background: "linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%)" }}>
                   <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-400 group-hover:text-white transition-colors duration-300">
+                    <div className="p-1.5 rounded-lg bg-zinc-800/80 border border-zinc-700/50 text-zinc-400 group-hover:text-white transition-colors duration-300">
                       <Monitor size={14} />
                     </div>
                     <div className="leading-tight">
@@ -190,13 +173,25 @@ export default function ToolsBoard() {
               <div className="rounded-xl overflow-hidden border border-zinc-800 bg-black shadow">
                 <div className="p-2 border-b border-zinc-800">
                   <div className="grid grid-cols-2 gap-1.5">
-                    <Link href="/experience" className="block">
-                      <div className="p-1.5 rounded-lg bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors text-center">
+                    <Link href="/experience" className="block relative overflow-hidden">
+                      <div className="absolute -right-6 -bottom-6 opacity-40">
+                        <div className="w-16 h-16 rounded-full border-2 border-zinc-500" />
+                      </div>
+                      <div className="absolute -right-2 -bottom-2 opacity-30">
+                        <div className="w-10 h-10 rounded-full border-2 border-zinc-500" />
+                      </div>
+                      <div className="p-1.5 rounded-lg bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors text-center relative z-10">
                         <div className="text-xs sm:text-sm font-extrabold leading-tight text-zinc-100 tracking-tight">EXPER<br/>IENCE.</div>
                       </div>
                     </Link>
-                    <Link href="/achievements" className="block">
-                      <div className="p-1.5 rounded-lg bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors text-center">
+                    <Link href="/achievements" className="block relative overflow-hidden">
+                      <div className="absolute -right-6 -bottom-6 opacity-40">
+                        <div className="w-16 h-16 rounded-full border-2 border-zinc-500" />
+                      </div>
+                      <div className="absolute -right-2 -bottom-2 opacity-30">
+                        <div className="w-10 h-10 rounded-full border-2 border-zinc-500" />
+                      </div>
+                      <div className="p-1.5 rounded-lg bg-zinc-900/50 border border-zinc-700 hover:bg-zinc-800/70 transition-colors text-center relative z-10">
                         <div className="text-xs sm:text-sm font-extrabold leading-tight text-zinc-100 tracking-tight">ACHIEV<br/>EMENT.</div>
                       </div>
                     </Link>

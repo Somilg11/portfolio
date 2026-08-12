@@ -25,15 +25,16 @@ export default function LinksCard() {
 
   return (
     <div className="flex items-center justify-center w-full">
-      <div className="flex items-center gap-6 bg-gradient-to-br from-zinc-950/80 to-zinc-900/80 border border-zinc-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
-        {/* Left side: Title */}
-        <div className="text-5xl md:text-6xl font-extrabold leading-none tracking-tighter text-zinc-100">
-          <div>LIN</div>
-          <div>KS.</div>
+      <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 bg-black border border-zinc-800 rounded-2xl p-4 md:p-6 shadow-xl">
+        {/* Title */}
+        <div className="text-4xl md:text-6xl font-extrabold leading-none tracking-tighter text-zinc-100 text-center md:text-left">
+          <div className="md:hidden">LINKS.</div>
+          <div className="hidden md:block">LIN</div>
+          <div className="hidden md:block">KS.</div>
         </div>
 
-        {/* Right side: Icon grid */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* Icons - single row on mobile, 2-col grid on desktop */}
+        <div className="flex flex-row flex-wrap justify-center md:grid md:grid-cols-2 gap-3 md:gap-4">
           <LinkBtn href="https://github.com/Somilg11" title="GitHub">
             <Github size={26} />
           </LinkBtn>

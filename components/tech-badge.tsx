@@ -6,12 +6,14 @@ import {
   SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress, SiFastapi, 
   SiNpm, SiCloudflare, SiDocker, SiPostgresql, SiPrisma, 
   SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiJavascript,
-  SiTypescript, SiStreamlit, SiShadcnui, SiVercel, SiFigma
+  SiTypescript, SiStreamlit, SiShadcnui, SiVercel, SiFigma, SiNestjs,
+  SiOpencv, SiOnnx
 } from "react-icons/si";
 import { FaAws as SiAmazonaws } from "react-icons/fa";
 import { VscTerminal } from "react-icons/vsc";
 import { SiMajorleaguehacking, SiJsonwebtokens, SiGooglegemini, SiSocketdotio } from "react-icons/si";
 import { GiCircularSaw } from "react-icons/gi";
+import { FaFilm } from "react-icons/fa";
 
 const iconMap: Record<string, React.ReactNode> = {
   "React": <SiReact size={18} className="text-sky-400" />,
@@ -46,6 +48,13 @@ const iconMap: Record<string, React.ReactNode> = {
   "Convex": <GiCircularSaw size={18} className="text-orange-400" />,
   "Gemini": <SiGooglegemini size={18} className="text-blue-400" />,
   "Socket": <SiSocketdotio size={18} className="text-white" />,
+  "NestJS": <SiNestjs size={18} className="text-red-500" />,
+  "ONNX": <SiOnnx size={18} className="text-red-500" />,
+  "OpenCV": <SiOpencv size={18} className="text-green-600" />,
+  "FFmpeg": <FaFilm size={18} className="text-green-500" />,
+  "RBAC": <VscTerminal size={18} className="text-zinc-400" />,
+  "OCR": <VscTerminal size={18} className="text-zinc-400" />,
+  "REST APIs": <VscTerminal size={18} className="text-zinc-400" />,
 };
 
 export const TechBadge = ({ tech, showName }: { tech: string; showName?: boolean }) => {

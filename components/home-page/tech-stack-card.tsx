@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import { 
   SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress, SiFastapi, 
   SiNpm, SiCloudflare, SiDocker, SiPostman, SiPostgresql, SiPrisma, 
-  SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo 
+  SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiRust, SiNestjs
 } from "react-icons/si";
 import { SiShadcnui } from "react-icons/si";
 import { VscTerminal } from "react-icons/vsc";
+import { SiTanstack } from "react-icons/si";
 
 export default function TechStackCard() {
   const getIcon = (text: string) => {
@@ -16,7 +17,9 @@ export default function TechStackCard() {
       case "React": return <SiReact size={14} className="text-sky-400" />;
       case "Nextjs": return <SiNextdotjs size={14} className="text-white" />;
       case "Shadcn": return <SiShadcnui size={14}className="text-white" />;
+      case "Tanstack": return <SiTanstack size={14} className="text-red-500" />;
       case "Tailwindcss": return <SiTailwindcss size={14} className="text-teal-400" />;
+      case "Nestjs": return <SiNestjs size={14} className="text-red-500" />;
       case "Nodejs": return <SiNodedotjs size={14} className="text-green-500" />;
       case "Express": return <SiExpress size={14} className="text-white" />;
       case "FastAPI": return <SiFastapi size={14} className="text-teal-500" />;
@@ -31,6 +34,7 @@ export default function TechStackCard() {
       case "C++": return <SiCplusplus size={14} className="text-blue-600" />;
       case "Python": return <SiPython size={14} className="text-yellow-400" />;
       case "GO": return <SiGo size={14} className="text-cyan-500" />;
+      case "Rust": return <SiRust size={14} className="text-orange-500" />;
       default: return <VscTerminal size={14} className="text-zinc-400" />;
     }
   };
@@ -79,15 +83,15 @@ export default function TechStackCard() {
             "Nextjs",
             "Shadcn",
             "Tailwindcss",
-            "Zustand",
-            "Tanstack Query",
+            // "Zustand",
+            "Tanstack",
           ].map(renderBadge)}
         </div>
       </div>
       <div className="mb-6">
         <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Backend</div>
         <div className="flex flex-wrap gap-2.5">
-          {["Nodejs", "Express", "FastAPI", "NPM"].map(renderBadge)}
+          {["Nestjs", "Nodejs", "Express", "FastAPI", "NPM"].map(renderBadge)}
         </div>
       </div>
       <div className="mb-6">
@@ -107,7 +111,7 @@ export default function TechStackCard() {
       <div className="mb-2">
         <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Others</div>
         <div className="flex flex-wrap gap-2.5">
-          {["C++", "Python", "GO"].map(renderBadge)}
+          {["C++", "Python", "GO", "Rust"].map(renderBadge)}
         </div>
       </div>
     </div>
