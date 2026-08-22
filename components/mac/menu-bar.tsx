@@ -88,23 +88,6 @@ export function MenuBar() {
 
   const menus: { label: string; bold?: boolean; icon?: React.ReactNode; items: Item[]; hideOnMobile?: boolean }[] = [
     {
-      label: "apple",
-      icon: <SiApple size={14} />,
-      items: [
-        { type: "item", label: "About This Developer", onSelect: () => { setAboutOpen(true); setOpen(null); } },
-        { type: "item", label: "System Specs…", onSelect: () => { setAboutOpen(true); setOpen(null); } },
-        { type: "separator" },
-        { type: "item", label: "Resume…", shortcut: "⌘R", onSelect: downloadResume },
-        { type: "separator" },
-        {
-          type: "item",
-          label: theme === "dark" ? "Wake (Light Mode)" : "Sleep (Dark Mode)",
-          onSelect: () => { setTheme(theme === "dark" ? "light" : "dark"); setOpen(null); },
-        },
-        { type: "item", label: "Restart…", onSelect: () => window.location.reload() },
-      ],
-    },
-    {
       label: "Somil",
       bold: true,
       items: [
@@ -123,16 +106,8 @@ export function MenuBar() {
         { type: "separator" },
         { type: "item", label: "Open GitHub", onSelect: () => external("https://github.com/Somilg11") },
         { type: "item", label: "Open Codolio", onSelect: () => external("https://codolio.com/profile/strangecodes") },
-      ],
-    },
-    {
-      label: "Edit",
-      hideOnMobile: true,
-      items: [
-        { type: "item", label: "Copy Email", shortcut: "⌘C", onSelect: () => copy("gsomil93@gmail.com", "Email") },
-        { type: "item", label: "Copy Page Link", onSelect: () => copy(window.location.href, "Link") },
         { type: "separator" },
-        { type: "item", label: "Find on GitHub", shortcut: "⌘F", onSelect: () => external("https://github.com/Somilg11?tab=repositories") },
+        { type: "item", label: "Copy Page Link", onSelect: () => copy(window.location.href, "Link") },
       ],
     },
     {
@@ -143,6 +118,8 @@ export function MenuBar() {
         { type: "item", label: "Match System", checked: theme === "system", onSelect: () => { setTheme("system"); setOpen(null); } },
         { type: "separator" },
         { type: "item", label: "Interface Sounds", checked: soundOn, onSelect: () => { setSoundOn(!soundOn); setOpen(null); } },
+        { type: "separator" },
+        { type: "item", label: "System Specs…", onSelect: () => { setAboutOpen(true); setOpen(null); } },
       ],
     },
     {
@@ -169,6 +146,17 @@ export function MenuBar() {
         ref={barRef}
         className="mac-vibrancy fixed inset-x-0 top-0 z-50 flex h-7 items-center gap-0.5 overflow-x-auto border-x-0 border-t-0 px-2 text-[13px] text-foreground/85 scrollbar-none"
       >
+        <button
+          type="button"
+          data-sound="open"
+          aria-label="System specs"
+          title="System specs"
+          onClick={() => { play("open"); setOpen(null); setAboutOpen(true); }}
+          className="rounded-[5px] px-2 py-[3px] leading-none transition-colors hover:bg-foreground/10"
+        >
+          <SiApple size={14} />
+        </button>
+
         {menus.map((menu) => (
           <div key={menu.label} className={cn("relative", menu.hideOnMobile && "hidden sm:block")}>
             <button

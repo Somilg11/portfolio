@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import React from "react";
-import { ArrowUpRight, Folder } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { FolderGlyph } from "@/components/mac/glyphs";
 import { MacWindow } from "@/components/mac/window";
 import { AppIcon } from "@/components/mac/app-icon";
 import { projectData } from "@/data/projectData";
@@ -18,7 +19,7 @@ export default function ProjectPoster() {
         className="group flex items-center gap-2.5 rounded-mac p-1.5 transition-colors duration-150 hover:bg-foreground/[0.05]"
       >
         <AppIcon tone="teal" size="lg">
-          <Folder size={19} />
+          <FolderGlyph size={21} />
         </AppIcon>
         <div className="min-w-0 flex-1">
           <div className="text-[14px] font-medium leading-tight">Project Library</div>

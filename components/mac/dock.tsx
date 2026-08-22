@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
-import { Briefcase, FileText, Folder, Home, Linkedin, Mail, Newspaper, Trophy } from "lucide-react";
+import { Linkedin } from "lucide-react";
 import { SiGithub, SiX } from "react-icons/si";
+import { CaseGlyph, DocGlyph, FinderGlyph, FolderGlyph, MailGlyph, NotesGlyph, TrophyGlyph } from "./glyphs";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
 import type { Tone } from "./app-icon";
@@ -33,16 +34,16 @@ const tones: Record<Tone, string> = {
 };
 
 const items: DockItem[] = [
-  { label: "Home", icon: <Home size={18} />, tone: "blue", href: "/" },
-  { label: "Projects", icon: <Folder size={18} />, tone: "teal", href: "/projects" },
-  { label: "Experience", icon: <Briefcase size={18} />, tone: "orange", href: "/experience" },
-  { label: "Achievements", icon: <Trophy size={18} />, tone: "yellow", href: "/achievements" },
-  { label: "Blog", icon: <Newspaper size={18} />, tone: "violet", href: "/blog" },
-  { label: "Mail", icon: <Mail size={18} />, tone: "indigo", external: "mailto:gsomil93@gmail.com" },
+  { label: "Home", icon: <FinderGlyph size={20} />, tone: "blue", href: "/" },
+  { label: "Projects", icon: <FolderGlyph size={20} />, tone: "teal", href: "/projects" },
+  { label: "Experience", icon: <CaseGlyph size={19} />, tone: "indigo", href: "/experience" },
+  { label: "Achievements", icon: <TrophyGlyph size={19} />, tone: "orange", href: "/achievements" },
+  { label: "Blog", icon: <NotesGlyph size={19} />, tone: "yellow", href: "/blog" },
+  { label: "Mail", icon: <MailGlyph size={19} />, tone: "blue", external: "mailto:gsomil93@gmail.com" },
   { label: "GitHub", icon: <SiGithub size={17} />, tone: "graphite", external: "https://github.com/Somilg11" },
   { label: "LinkedIn", icon: <Linkedin size={18} />, tone: "blue", external: "https://www.linkedin.com/in/somil-1101s/" },
   { label: "X", icon: <SiX size={15} />, tone: "graphite", external: "https://x.com/somil_1101" },
-  { label: "Resume", icon: <FileText size={18} />, tone: "red", download: true },
+  { label: "Resume", icon: <DocGlyph size={19} />, tone: "red", download: true },
 ];
 
 function useCompactDock() {

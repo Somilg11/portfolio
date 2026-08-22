@@ -4,10 +4,12 @@
 import React from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Briefcase, FileText, GitBranch, Newspaper, Trophy } from "lucide-react";
+import { GitBranch } from "lucide-react";
+import { CaseGlyph, DocGlyph, NotesGlyph, TrophyGlyph } from "@/components/mac/glyphs";
 import { SiClaudecode, SiDiscord, SiGithub, SiNotion, SiOpencode, SiPostman } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 import { MacWindow } from "@/components/mac/window";
+import DotField from "@/components/home-page/dot-field";
 import { AppIcon, type Tone } from "@/components/mac/app-icon";
 import { projectData } from "@/data/projectData";
 
@@ -60,13 +62,9 @@ export default function ToolsBoard() {
         {/* Widgets */}
         <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-2.5 scrollbar-none sm:p-3">
           <div className="grid min-w-0 grid-cols-2 gap-2.5">
-            {/* Illustration */}
-            <div className="col-span-2 overflow-hidden rounded-mac border border-border">
-              <img
-                src="/anime.jpg"
-                alt="Illustration"
-                className="h-[150px] w-full object-cover sm:h-[170px]"
-              />
+            {/* Pixel field */}
+            <div className="col-span-2 overflow-hidden rounded-mac border border-border bg-background/40">
+              <DotField className="block h-[66px] w-full sm:h-[76px]" />
             </div>
 
             {/* Stats strip */}
@@ -83,9 +81,9 @@ export default function ToolsBoard() {
               </div>
             </Card>
 
-            <NavCard href="/blog" tone="violet" icon={<Newspaper size={15} />} title="Blog" caption="notes & deep dives" />
-            <NavCard href="/experience" tone="orange" icon={<Briefcase size={15} />} title="Experience" caption="2023 — present" />
-            <NavCard href="/achievements" tone="yellow" icon={<Trophy size={15} />} title="Achievements" caption="wins & finals" />
+            <NavCard href="/blog" tone="yellow" icon={<NotesGlyph size={17} />} title="Blog" caption="notes & deep dives" />
+            <NavCard href="/experience" tone="indigo" icon={<CaseGlyph size={17} />} title="Experience" caption="2023 — present" />
+            <NavCard href="/achievements" tone="orange" icon={<TrophyGlyph size={17} />} title="Achievements" caption="wins & finals" />
 
             <Card
               as="button"
@@ -97,7 +95,7 @@ export default function ToolsBoard() {
               }}
               sound="success"
             >
-              <Row tone="red" icon={<FileText size={15} />} title="Resume" caption="download PDF" />
+              <Row tone="red" icon={<DocGlyph size={17} />} title="Resume" caption="download PDF" />
             </Card>
 
             {/* Contributions */}

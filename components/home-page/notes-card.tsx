@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Newspaper } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { NotesGlyph } from "@/components/mac/glyphs";
 import { MacWindow } from "@/components/mac/window";
 import { AppIcon } from "@/components/mac/app-icon";
 
@@ -16,8 +17,8 @@ export default function NotesCard({ notes }: { notes: NotePreview[] }) {
         data-sound="swoosh"
         className="group flex items-center gap-2.5 rounded-mac p-1.5 transition-colors duration-150 hover:bg-foreground/[0.05]"
       >
-        <AppIcon tone="violet" size="lg">
-          <Newspaper size={18} />
+        <AppIcon tone="yellow" size="lg">
+          <NotesGlyph size={20} />
         </AppIcon>
         <div className="min-w-0 flex-1">
           <div className="text-[14px] font-medium leading-tight">Writing</div>
