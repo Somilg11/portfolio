@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Download, Volume2 } from "lucide-react";
 import { ModeIcon, SearchIcon } from "./asset-icons";
 import { AssetIcon } from "./app-icon";
-import { FinderGlyph, FolderGlyph } from "./glyphs";
+import { FinderGlyph } from "./glyphs";
 import { projectData } from "@/data/projectData";
 import { useSound } from "@/components/sound-provider";
 import { useWindows } from "@/components/windows/window-manager";
@@ -56,7 +56,7 @@ export function Spotlight() {
           close();
         },
       },
-      { id: "projects", label: "Projects", hint: "⌘2", group: "Apps", icon: <FolderGlyph size={16} />, run: openApp("projects") },
+      { id: "projects", label: "Projects", hint: "⌘2", group: "Apps", icon: <AssetIcon src="/mac-assets/images/projects.png" size={17} />, run: openApp("projects") },
       { id: "experience", label: "Experience", hint: "⌘3", group: "Apps", icon: <AssetIcon src="/mac-assets/images/experience.png" size={17} />, run: openApp("experience") },
       { id: "achievements", label: "Achievements", hint: "⌘4", group: "Apps", icon: <AssetIcon src="/mac-assets/images/achievement.png" size={17} />, run: openApp("achievements") },
       { id: "blog", label: "Blog", hint: "⌘5", group: "Apps", icon: <AssetIcon src="/mac-assets/images/blog.png" size={17} />, run: openApp("blog") },
@@ -68,7 +68,7 @@ export function Spotlight() {
       label: project.title,
       hint: "Project",
       group: "Projects",
-      icon: <FolderGlyph size={16} />,
+      icon: <AssetIcon src="/mac-assets/images/projects.png" size={17} />,
       run: () => {
         play("swoosh");
         window.open(project.live || project.url, "_blank", "noopener,noreferrer");

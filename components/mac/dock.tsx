@@ -42,7 +42,7 @@ const tones: Record<Tone, string> = {
 
 const items: DockItem[] = [
   { label: "Desktop", image: "/mac-assets/images/finder.png", desktop: true },
-  { label: "Projects", image: "/mac-assets/images/folder.png", window: "projects" },
+  { label: "Projects", image: "/mac-assets/images/projects.png", window: "projects" },
   { label: "Experience", image: "/mac-assets/images/experience.png", window: "experience" },
   { label: "Achievements", image: "/mac-assets/images/achievement.png", window: "achievements" },
   { label: "Blog", image: "/mac-assets/images/blog.png", window: "blog" },

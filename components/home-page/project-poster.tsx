@@ -2,9 +2,8 @@
 
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
-import { FolderGlyph } from "@/components/mac/glyphs";
 import { MacWindow } from "@/components/mac/window";
-import { AppIcon } from "@/components/mac/app-icon";
+import { AssetIcon } from "@/components/mac/app-icon";
 import { projectData } from "@/data/projectData";
 import { useWindows } from "@/components/windows/window-manager";
 
@@ -20,9 +19,7 @@ export default function ProjectPoster() {
         onClick={() => open("projects")}
         className="group flex w-full items-center gap-2.5 rounded-mac p-1.5 text-left transition-colors duration-150 hover:bg-foreground/[0.05]"
       >
-        <AppIcon tone="teal" size="lg">
-          <FolderGlyph size={21} />
-        </AppIcon>
+        <AssetIcon src="/mac-assets/images/projects.png" size={40} />
         <div className="min-w-0 flex-1">
           <div className="text-[14px] font-medium leading-tight">Project Library</div>
           <div className="text-[11.5px] leading-tight text-muted-foreground">
