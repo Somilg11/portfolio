@@ -1,119 +1,108 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress, SiFastapi, 
-  SiNpm, SiCloudflare, SiDocker, SiPostman, SiPostgresql, SiPrisma, 
-  SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiRust, SiNestjs
+import {
+  SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress, SiFastapi,
+  SiNpm, SiCloudflare, SiDocker, SiPostman, SiPostgresql, SiPrisma,
+  SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiRust, SiNestjs,
+  SiShadcnui, SiTanstack,
 } from "react-icons/si";
-import { SiShadcnui } from "react-icons/si";
 import { VscTerminal } from "react-icons/vsc";
-import { SiTanstack } from "react-icons/si";
+import { cn } from "@/lib/utils";
+import { MacWindow } from "@/components/mac/window";
+
+const icons: Record<string, React.ReactNode> = {
+  React: <SiReact className="text-sky-500" />,
+  Nextjs: <SiNextdotjs className="text-foreground" />,
+  Shadcn: <SiShadcnui className="text-foreground" />,
+  Tanstack: <SiTanstack className="text-rose-500" />,
+  Tailwindcss: <SiTailwindcss className="text-teal-500" />,
+  Nestjs: <SiNestjs className="text-rose-500" />,
+  Nodejs: <SiNodedotjs className="text-green-600" />,
+  Express: <SiExpress className="text-foreground" />,
+  FastAPI: <SiFastapi className="text-teal-600" />,
+  NPM: <SiNpm className="text-red-500" />,
+  "Cloudflare Workers": <SiCloudflare className="text-orange-500" />,
+  Docker: <SiDocker className="text-blue-500" />,
+  Postman: <SiPostman className="text-orange-500" />,
+  Postgres: <SiPostgresql className="text-blue-500" />,
+  "Prisma ORM": <SiPrisma className="text-foreground" />,
+  MongoDB: <SiMongodb className="text-green-600" />,
+  Redis: <SiRedis className="text-red-600" />,
+  "C++": <SiCplusplus className="text-blue-600" />,
+  Python: <SiPython className="text-yellow-500" />,
+  GO: <SiGo className="text-cyan-500" />,
+  Rust: <SiRust className="text-orange-600" />,
+};
+
+const groups: { id: string; label: string; items: string[] }[] = [
+  { id: "frontend", label: "Frontend", items: ["React", "Nextjs", "Shadcn", "Tailwindcss", "Tanstack"] },
+  { id: "backend", label: "Backend", items: ["Nestjs", "Nodejs", "Express", "FastAPI", "NPM"] },
+  { id: "data", label: "Data & Infra", items: ["Cloudflare Workers", "Docker", "Postman", "Postgres", "Prisma ORM", "MongoDB", "Redis"] },
+  { id: "languages", label: "Languages", items: ["C++", "Python", "GO", "Rust"] },
+];
 
 export default function TechStackCard() {
-  const getIcon = (text: string) => {
-    switch(text) {
-      case "React": return <SiReact size={14} className="text-sky-400" />;
-      case "Nextjs": return <SiNextdotjs size={14} className="text-white" />;
-      case "Shadcn": return <SiShadcnui size={14}className="text-white" />;
-      case "Tanstack": return <SiTanstack size={14} className="text-red-500" />;
-      case "Tailwindcss": return <SiTailwindcss size={14} className="text-teal-400" />;
-      case "Nestjs": return <SiNestjs size={14} className="text-red-500" />;
-      case "Nodejs": return <SiNodedotjs size={14} className="text-green-500" />;
-      case "Express": return <SiExpress size={14} className="text-white" />;
-      case "FastAPI": return <SiFastapi size={14} className="text-teal-500" />;
-      case "NPM": return <SiNpm size={14} className="text-red-500" />;
-      case "Cloudflare Workers": return <SiCloudflare size={14} className="text-orange-400" />;
-      case "Docker": return <SiDocker size={14} className="text-blue-500" />;
-      case "Postman": return <SiPostman size={14} className="text-orange-500" />;
-      case "Postgres": return <SiPostgresql size={14} className="text-blue-400" />;
-      case "Prisma ORM": return <SiPrisma size={14} className="text-white" />;
-      case "MongoDB": return <SiMongodb size={14} className="text-green-500" />;
-      case "Redis": return <SiRedis size={14} className="text-red-600" />;
-      case "C++": return <SiCplusplus size={14} className="text-blue-600" />;
-      case "Python": return <SiPython size={14} className="text-yellow-400" />;
-      case "GO": return <SiGo size={14} className="text-cyan-500" />;
-      case "Rust": return <SiRust size={14} className="text-orange-500" />;
-      default: return <VscTerminal size={14} className="text-zinc-400" />;
-    }
-  };
+  const [active, setActive] = useState<string>("all");
 
-  const getBadgeVariants = (text: string) => {
-    const rotation = text.length % 2 === 0 ? 3 : -3;
-    return {
-      hover: {
-        scale: 1.15,
-        rotate: rotation,
-        transition: {
-          type: "spring",
-          stiffness: 400,
-          damping: 10,
-        },
-      },
-      tap: {
-        scale: 0.9,
-      },
-    };
-  };
-
-  const renderBadge = (text: string) => (
-    <motion.div
-      key={text}
-      variants={getBadgeVariants(text)}
-      whileHover="hover"
-      whileTap="tap"
-      className="border border-dashed border-zinc-700 bg-zinc-950/50 text-zinc-200 px-3 py-1.5 rounded-xl text-sm font-medium cursor-pointer shadow-sm backdrop-blur-sm flex items-center justify-center gap-2 select-none"
-    >
-      <span>{getIcon(text)}</span>
-      <span>{text}</span>
-    </motion.div>
-  );
+  const visible = active === "all" ? groups : groups.filter((g) => g.id === active);
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
 
   return (
-    <div className="rounded-2xl bg-black shadow-xl border border-zinc-800 px-6 py-6 h-full">
-      <div className="text-3xl md:text-4xl font-serif text-zinc-100 mb-6 tracking-tight">
-        Skills <span className="text-zinc-600">#</span>
-      </div>
-      <div className="mb-6">
-        <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Frontend</div>
-        <div className="flex flex-wrap gap-2.5">
-          {[
-            "React",
-            "Nextjs",
-            "Shadcn",
-            "Tailwindcss",
-            // "Zustand",
-            "Tanstack",
-          ].map(renderBadge)}
+    <MacWindow
+      title="Skills"
+      className="h-full"
+      bodyClassName="p-0"
+      delay={0.1}
+      toolbar={<span className="text-[11px] text-muted-foreground">{total}</span>}
+    >
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col sm:flex-row">
+        {/* Finder-style source list — becomes a scrollable chip row on mobile */}
+        <aside className="mac-sidebar shrink-0 border-b border-border/70 p-1.5 sm:w-[112px] sm:border-b-0 sm:border-r">
+          <div className="flex gap-1 overflow-x-auto scrollbar-none sm:flex-col sm:overflow-visible">
+            {[{ id: "all", label: "All" }, ...groups].map((g) => (
+              <button
+                key={g.id}
+                type="button"
+                onClick={() => setActive(g.id)}
+                data-sound="click"
+                className={cn(
+                  "mac-row whitespace-nowrap text-left",
+                  active === g.id && "mac-row-active"
+                )}
+              >
+                {g.label}
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <div className="min-h-0 min-w-0 flex-1 space-y-3.5 overflow-y-auto p-3 scrollbar-none">
+          {visible.map((group) => (
+            <section key={group.id}>
+              <h3 className="mb-2 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                {group.label}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <motion.span
+                    key={item}
+                    whileHover={{ y: -2, scale: 1.04 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 18 }}
+                    data-sound="tick"
+                    className="flex select-none items-center gap-1.5 rounded-full border border-border bg-background/50 px-2 py-[3px] text-[11.5px] font-medium"
+                  >
+                    <span className="text-[12px]">{icons[item] ?? <VscTerminal className="text-muted-foreground" />}</span>
+                    {item}
+                  </motion.span>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </div>
-      <div className="mb-6">
-        <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Backend</div>
-        <div className="flex flex-wrap gap-2.5">
-          {["Nestjs", "Nodejs", "Express", "FastAPI", "NPM"].map(renderBadge)}
-        </div>
-      </div>
-      <div className="mb-6">
-        <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">DB & Services</div>
-        <div className="flex flex-wrap gap-2.5">
-          {[
-            "Cloudflare Workers",
-            "Docker",
-            "Postman",
-            "Postgres",
-            "Prisma ORM",
-            "MongoDB",
-            "Redis",
-          ].map(renderBadge)}
-        </div>
-      </div>
-      <div className="mb-2">
-        <div className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Others</div>
-        <div className="flex flex-wrap gap-2.5">
-          {["C++", "Python", "GO", "Rust"].map(renderBadge)}
-        </div>
-      </div>
-    </div>
+    </MacWindow>
   );
 }

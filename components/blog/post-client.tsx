@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { ArrowLeft, Calendar, Share2, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, Calendar, Check, Share2 } from "lucide-react";
+import { TrafficLights } from "@/components/mac/traffic-lights";
+import { useSound } from "@/components/sound-provider";
 
 export interface PostData {
   title: string;
@@ -16,132 +18,112 @@ export interface PostData {
 
 export function PostClientWrapper({ data, contentHtml }: { data: PostData; contentHtml: string }) {
   const [copied, setCopied] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  const router = useRouter();
+  const { play } = useSound();
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      play("success");
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      play("error");
+    }
   };
 
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-zinc-800 selection:text-white pb-32">
-      {/* Scroll Progress Bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-white z-50 origin-left"
-        style={{ scaleX }}
-      />
+    <div className="mx-auto w-full max-w-[900px] px-3 py-4 sm:px-6 sm:py-6">
+      <motion.article
+        initial={{ opacity: 0, scale: 0.98, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+        className="mac-window overflow-hidden"
+      >
+        {/* Title bar with reading progress */}
+        <header className="mac-titlebar sticky top-7 z-20 flex h-11 items-center gap-3 px-3">
+          <TrafficLights
+            onClose={() => { play("swoosh"); router.push("/blog"); }}
+            onMinimize={() => { play("swoosh"); router.push("/blog"); }}
+            onZoom={() => play("pop")}
+          />
 
-      <div className="max-w-3xl mx-auto px-6 pt-12 sm:pt-24">
-        {/* Back Button */}
-        <Link 
-          href="/blog" 
-          className="group inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-12 text-sm font-medium"
-        >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Back to Blog
-        </Link>
+          <div className="pointer-events-none absolute inset-x-0 flex justify-center">
+            <span className="max-w-[55%] truncate text-[13px] font-semibold tracking-tight">{data.title}</span>
+          </div>
 
-        {/* Header */}
-        <header className="mb-12">
-          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight leading-[1.1]">
-            {data.title}
-          </h1>
-          <p className="text-zinc-400 text-xl sm:text-2xl leading-relaxed">
-            {data.description}
-          </p>
+          <button
+            type="button"
+            onClick={handleShare}
+            data-sound="none"
+            className="mac-button ml-auto gap-1.5"
+          >
+            {copied ? <Check size={13} className="text-emerald-500" /> : <Share2 size={13} />}
+            <span className="hidden sm:inline">{copied ? "Copied" : "Share"}</span>
+          </button>
+
+          <motion.div
+            style={{ scaleX }}
+            className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-primary"
+          />
         </header>
 
-        {/* Post Info Bar */}
-        <div className="flex items-center justify-between py-6 border-y border-zinc-900 mb-12">
-          <div className="flex items-center gap-2 text-zinc-400 text-sm font-medium">
-            <Calendar size={16} />
-            <span>{new Date(data.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-          </div>
-          
-          <Button 
-            onClick={handleShare}
-            variant="outline" 
-            size="sm"
-            className="bg-zinc-950 border-zinc-800 hover:bg-zinc-900 text-zinc-300 gap-2 h-9 px-4 rounded-lg"
+        <div className="px-5 py-7 sm:px-10 sm:py-10">
+          <Link
+            href="/blog"
+            data-sound="swoosh"
+            className="group mb-8 inline-flex items-center gap-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            {copied ? <Check size={14} className="text-green-500" /> : <Share2 size={14} />}
-            {copied ? "Copied!" : "Share"}
-          </Button>
-        </div>
+            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+            All notes
+          </Link>
 
-        {/* TL;DR Section */}
-        {data.tldr && (
-          <section className="mb-16">
-            <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              TL;DR
-            </h3>
-            <div className="bg-zinc-900/30 border border-zinc-800/50 rounded-2xl p-6 sm:p-8">
-              <ul className="space-y-4">
-                {data.tldr.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-4 text-zinc-300 leading-relaxed">
-                    <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-zinc-600 shrink-0" />
-                    {item}
+          <h1 className="text-[30px] font-semibold leading-[1.12] tracking-tight sm:text-[42px]">
+            {data.title}
+          </h1>
+          <p className="mt-3 text-[16px] leading-relaxed text-muted-foreground sm:text-[18px]">
+            {data.description}
+          </p>
+
+          <div className="mac-hairline my-6 h-px" />
+
+          <div className="flex items-center gap-2 text-[12.5px] text-muted-foreground">
+            <Calendar size={13} />
+            {new Date(data.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+          </div>
+
+          {data.tldr && (
+            <section className="mt-8 rounded-mac border border-border bg-background/60 p-5 shadow-mac-1">
+              <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                TL;DR
+              </h2>
+              <ul className="space-y-2.5">
+                {data.tldr.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70" />
+                    <span className="text-[14px] leading-relaxed text-foreground/85">{item}</span>
                   </li>
                 ))}
               </ul>
-            </div>
-          </section>
-        )}
+            </section>
+          )}
 
-        {/* Article Content */}
-        <article 
-          className="prose prose-invert prose-zinc max-w-none 
-            prose-headings:font-bold prose-headings:tracking-tight 
-            prose-p:text-zinc-300 prose-p:leading-relaxed 
-            prose-strong:text-white prose-a:text-white prose-a:underline
-            prose-pre:bg-zinc-900/50 prose-pre:border prose-pre:border-zinc-800
-            prose-li:text-zinc-300"
-          dangerouslySetInnerHTML={{ __html: contentHtml }} 
-        />
-      </div>
-
-      {/* Floating TL;DR Status Pill */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
-        <motion.div 
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="flex items-center gap-3 px-4 py-2.5 bg-zinc-900/90 border border-zinc-800 backdrop-blur-xl rounded-full shadow-2xl"
-        >
-          <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-          <span className="text-sm font-bold tracking-tight text-white uppercase">TL;DR</span>
-          <div className="w-px h-4 bg-zinc-800 mx-1" />
-          <div className="relative w-5 h-5">
-            <svg className="w-full h-full -rotate-90">
-              <circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="text-zinc-800"
-              />
-              <motion.circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeDasharray="50.26"
-                style={{ pathLength: scrollYProgress }}
-                className="text-white"
-              />
-            </svg>
-          </div>
-        </motion.div>
-      </div>
-    </main>
+          <div
+            className="prose prose-neutral mt-10 max-w-none dark:prose-invert
+              prose-headings:font-semibold prose-headings:tracking-tight
+              prose-p:leading-relaxed prose-p:text-foreground/85
+              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+              prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:font-mono-sf prose-code:text-[13px] prose-code:before:content-none prose-code:after:content-none
+              prose-pre:rounded-mac prose-pre:border prose-pre:border-border prose-pre:bg-muted/50 prose-pre:text-foreground
+              prose-li:text-foreground/85
+              prose-img:rounded-mac"
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
+        </div>
+      </motion.article>
+    </div>
   );
 }
