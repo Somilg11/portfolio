@@ -1,57 +1,57 @@
 "use client";
 
-import { Github, Linkedin } from "lucide-react";
 import React from "react";
-import { SiDiscord, SiGmail, SiX } from "react-icons/si";
+import { SiDiscord } from "react-icons/si";
+import { ContactGlyph } from "@/components/mac/glyphs";
+import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/mac/asset-icons";
+import { MacWindow } from "@/components/mac/window";
+import { AppIcon, AssetIcon, type Tone } from "@/components/mac/app-icon";
 
-type LinkBtnProps = {
-  href: string;
-  title: string;
-  children: React.ReactNode;
-};
+type Tile = { href: string; label: string; tone?: Tone; icon?: React.ReactNode; image?: string };
+
+const tiles: Tile[] = [
+  { href: "https://github.com/Somilg11", label: "GitHub", tone: "graphite", icon: <GithubIcon size={19} /> },
+  { href: "https://x.com/somil_1101", label: "X", tone: "graphite", icon: <TwitterIcon size={17} /> },
+  { href: "mailto:gsomil93@gmail.com", label: "Mail", image: "/mac-assets/images/mail.png" },
+  { href: "https://discord.com/kakashi_11_", label: "Discord", tone: "indigo", icon: <SiDiscord size={15} /> },
+  { href: "https://www.linkedin.com/in/somil-1101s/", label: "LinkedIn", tone: "blue", icon: <LinkedinIcon size={19} /> },
+  { href: "https://codolio.com/profile/strangecodes", label: "Codolio", tone: "teal", icon: <ContactGlyph size={19} /> },
+];
 
 export default function LinksCard() {
-  const LinkBtn = ({ href, title, children }: LinkBtnProps) => (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      title={title}
-      className="bg-zinc-900/70 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-4 flex items-center justify-center text-zinc-200 hover:text-white hover:bg-zinc-800/70 transition-all duration-300 shadow-md hover:shadow-zinc-800/40 shrink-0 min-w-[56px] min-h-[56px]"
-    >
-      {children}
-    </a>
-  );
-
   return (
-    <div className="flex items-center justify-center w-full">
-      <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 bg-black border border-zinc-800 rounded-2xl p-4 md:p-6 shadow-xl">
-        {/* Title */}
-        <div className="text-4xl md:text-6xl font-extrabold leading-none tracking-tighter text-zinc-100 text-center md:text-left">
-          <div className="md:hidden">LINKS.</div>
-          <div className="hidden md:block">LIN</div>
-          <div className="hidden md:block">KS.</div>
-        </div>
-
-        {/* Icons - single row on mobile, 2-col grid on desktop */}
-        <div className="flex flex-row flex-wrap justify-center md:grid md:grid-cols-2 gap-3 md:gap-4">
-          <LinkBtn href="https://github.com/Somilg11" title="GitHub">
-            <Github size={26} />
-          </LinkBtn>
-          <LinkBtn href="https://x.com/somil_1101" title="X (Twitter)">
-            <SiX size={22} />
-          </LinkBtn>
-          <LinkBtn href="mailto:gsomil93@gmail.com" title="Gmail">
-            <SiGmail size={22} className="text-[#EA4335]" />
-          </LinkBtn>
-          <LinkBtn href="https://discord.com/kakashi_11_" title="Discord">
-            <SiDiscord size={22} className="text-[#5865F2]" />
-          </LinkBtn>
-          <LinkBtn href="https://www.linkedin.com/in/somil-1101s/" title="LinkedIn">
-            <Linkedin size={24} className="text-[#0A66C2]" />
-          </LinkBtn>
-        </div>
+    <MacWindow title="Links" className="w-full" bodyClassName="p-2.5" delay={0.1}>
+      <div className="grid grid-cols-3 gap-2">
+        {tiles.map((tile) => (
+          <a
+            key={tile.label}
+            href={tile.href}
+            target={tile.href.startsWith("mailto:") ? undefined : "_blank"}
+            rel="noopener noreferrer"
+            title={tile.label}
+            className="group flex flex-col items-center gap-1 rounded-mac p-1.5 transition-colors duration-150 hover:bg-foreground/[0.05]"
+          >
+            {tile.image ? (
+              <AssetIcon
+                src={tile.image}
+                size={36}
+                className="transition-transform duration-150 ease-mac-spring group-hover:-translate-y-0.5 group-active:scale-95"
+              />
+            ) : (
+              <AppIcon
+                tone={tile.tone ?? "graphite"}
+                size="md"
+                className="transition-transform duration-150 ease-mac-spring group-hover:-translate-y-0.5 group-active:scale-95"
+              >
+                {tile.icon}
+              </AppIcon>
+            )}
+            <span className="text-[10.5px] leading-none text-muted-foreground group-hover:text-foreground">
+              {tile.label}
+            </span>
+          </a>
+        ))}
       </div>
-    </div>
+    </MacWindow>
   );
 }

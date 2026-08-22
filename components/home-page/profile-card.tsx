@@ -1,121 +1,101 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { MapPin, Sparkles } from "lucide-react";
+import { MacWindow } from "@/components/mac/window";
+
+const rotatingWords = ["backends", "frontends", "design systems", "scalable systems"];
 
 export default function ProfileCard() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [fadeState, setFadeState] = useState<"fade-in" | "fade-out">("fade-in");
-  const [mounted, setMounted] = useState(false);
-  const [rainyTheme, setRainyTheme] = useState(false);
+  const [now, setNow] = useState<Date | null>(null);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [fading, setFading] = useState(false);
 
-  const rotatingWords = [
-    "backends",
-    "frontends",
-    "designs",
-    "scalable-systems",
-  ];
-
-  // ⏱ time + text rotation
   useEffect(() => {
-    setMounted(true);
-    
-    // Load theme from localStorage
-    const savedTheme = localStorage.getItem("rainyTheme");
-    if (savedTheme === "true") {
-      setRainyTheme(true);
-      document.documentElement.classList.add("rainy");
-    }
-
-    const timerId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    const wordTimer = setInterval(() => {
-      setFadeState("fade-out");
-      setTimeout(() => {
-        setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
-        setFadeState("fade-in");
-      }, 400);
-    }, 2500);
+    setNow(new Date());
+    const clock = window.setInterval(() => setNow(new Date()), 1000);
+    const words = window.setInterval(() => {
+      setFading(true);
+      window.setTimeout(() => {
+        setWordIndex((i) => (i + 1) % rotatingWords.length);
+        setFading(false);
+      }, 320);
+    }, 2600);
 
     return () => {
-      clearInterval(timerId);
-      clearInterval(wordTimer);
+      window.clearInterval(clock);
+      window.clearInterval(words);
     };
   }, []);
 
-  useEffect(() => {
-    if (rainyTheme) {
-      document.documentElement.classList.add("rainy");
-    } else {
-      document.documentElement.classList.remove("rainy");
-    }
-    localStorage.setItem("rainyTheme", String(rainyTheme));
-  }, [rainyTheme]);
-
-  const formattedTime = currentTime
-    .toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    })
-    .replace(",", "");
+  const time = now
+    ? now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
+    : "";
 
   return (
-    <div className="rounded-2xl bg-black shadow-2xl border border-zinc-800 px-7 md:px-10 py-7 md:py-5 w-full h-full flex flex-col relative z-20">
-      <div className="flex items-start gap-4">
-        <img
-          src="/myprofileimage.png"
-          alt="SG"
-          className="w-[72px] h-[72px] rounded-full border-2 border-zinc-700 object-cover"
-        />
+    <MacWindow
+      title="somil — profile"
+      className="h-full"
+      bodyClassName="p-3.5 sm:p-4"
+      delay={0.05}
+    >
+      <div className="flex items-start gap-3.5">
+        <div className="relative shrink-0">
+          <Image
+            src="/myprofileimage.png"
+            alt="Somil Gupta"
+            width={60}
+            height={60}
+            priority
+            className="h-[60px] w-[60px] rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10"
+          />
+          <span className="absolute bottom-0.5 right-0.5 h-3 w-3 rounded-full border-2 border-card bg-emerald-500" />
+        </div>
 
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-2xl font-bold text-zinc-100">somil</div>
-              <div className="text-sm text-zinc-400">@gsomil</div>
-            </div>
-
-            <button
-              onClick={() => setRainyTheme(!rainyTheme)}
-              className={`p-2 text-xs font-bold transition-all duration-300 hover:scale-110 ${rainyTheme ? "text-blue-300" : "text-zinc-400 hover:text-white"}`}
-            >
-              猫
-            </button>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-2">
+            <h1 className="text-[21px] font-semibold leading-none tracking-tight">somil</h1>
+            <span className="text-[12px] text-muted-foreground">@gsomil</span>
           </div>
 
-          <p className="text-zinc-100 mt-4 text-lg">
+          <p className="mt-2 text-[15px] leading-snug">
             I build{" "}
             <span
-              className={`font-bold text-purple-400 transition-all duration-700 ${
-                fadeState === "fade-in"
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-2"
+              className={`font-semibold text-primary transition-all duration-300 ${
+                fading ? "-translate-y-1 opacity-0" : "translate-y-0 opacity-100"
               }`}
             >
-              {rotatingWords[currentWordIndex]}
+              {rotatingWords[wordIndex]}
             </span>
           </p>
 
-          <p className="text-zinc-400 mt-2">
-            Hello, I&apos;m Somil! a 22 year old developer based in India.
+          <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+            Hey, I&apos;m Somil — a 22 year old engineer shipping production software from India.
           </p>
+
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="mac-pill">
+              <MapPin size={11} /> India · IST
+            </span>
+            <span className="mac-pill">
+              <Sparkles size={11} /> SDE Intern @ Recrivio
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="mt-auto pt-2 text-xs text-zinc-400 flex items-center">
-        <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-        Available for work
-        <span className="ml-auto font-mono">{mounted ? formattedTime : ""}</span>
+      <div className="mac-hairline my-3 h-px" />
+
+      <div className="flex items-center justify-between text-[11.5px] text-muted-foreground">
+        <span className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          Available for work
+        </span>
+        <span suppressHydrationWarning className="font-mono-sf tabular-nums">
+          {time}
+        </span>
       </div>
-    </div>
+    </MacWindow>
   );
 }
