@@ -43,6 +43,37 @@ type AppIconProps = {
   className?: string;
 };
 
+/** Real macOS-style app icon from public/mac-assets. */
+export function AssetIcon({
+  src,
+  size = 36,
+  className,
+  alt = "",
+}: {
+  src: string;
+  size?: number;
+  className?: string;
+  alt?: string;
+}) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      width={size}
+      height={size}
+      draggable={false}
+      decoding="async"
+      style={{ width: size, height: size }}
+      // Squircle-ish corners so square artwork sits with the system icons.
+      className={cn(
+        "shrink-0 select-none rounded-[22.5%] object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.18)]",
+        className
+      )}
+    />
+  );
+}
+
 /** Solid, flat app icon — no gradients, no gloss. */
 export function AppIcon({ tone, size = "md", children, className }: AppIconProps) {
   return (

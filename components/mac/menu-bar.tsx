@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
 import { BatteryMedium, Check, Command, Volume2, VolumeX } from "lucide-react";
@@ -10,6 +10,7 @@ import { SiApple } from "react-icons/si";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
 import { AboutDialog } from "./about-dialog";
+import { useWindows } from "@/components/windows/window-manager";
 
 type Item =
   | { type: "item"; label: string; shortcut?: string; onSelect: () => void; checked?: boolean; disabled?: boolean }
@@ -17,12 +18,18 @@ type Item =
 
 export function MenuBar() {
   const [open, setOpen] = useState<string | null>(null);
+  // Dropdowns are rendered fixed, not absolute, so the scrollable menu bar
+  // can't clip them on narrow screens.
+  const [menuLeft, setMenuLeft] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [time, setTime] = useState<Date | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
-  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { enabled: soundOn, setEnabled: setSoundOn, play } = useSound();
 
@@ -33,8 +40,17 @@ export function MenuBar() {
   }, []);
 
   useEffect(() => {
+    const sync = () => setFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
+
+  useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (barRef.current && !barRef.current.contains(e.target as Node)) setOpen(null);
+      const target = e.target as HTMLElement;
+      if (barRef.current?.contains(target)) return;
+      if (target.closest("[data-menu-dropdown]")) return;
+      setOpen(null);
     };
     const onEsc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
     document.addEventListener("mousedown", onDown);
@@ -45,9 +61,18 @@ export function MenuBar() {
     };
   }, []);
 
-  const go = (href: string) => {
-    play("swoosh");
-    router.push(href);
+  const {
+    open: openWindow,
+    close: closeWindow,
+    closeAll,
+    minimizeAll,
+    toggleMaximize,
+    focused,
+    windows,
+  } = useWindows();
+
+  const openApp = (id: Parameters<typeof openWindow>[0]) => {
+    openWindow(id);
     setOpen(null);
   };
 
@@ -68,6 +93,14 @@ export function MenuBar() {
     setOpen(null);
   };
 
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    } else {
+      void document.documentElement.requestFullscreen().catch(() => play("error"));
+    }
+  };
+
   const downloadResume = () => {
     const a = document.createElement("a");
     a.href = "/resume.pdf";
@@ -82,11 +115,13 @@ export function MenuBar() {
       label: "Somil",
       bold: true,
       items: [
-        { type: "item", label: "Home", shortcut: "⌘1", onSelect: () => go("/") },
-        { type: "item", label: "Projects", shortcut: "⌘2", onSelect: () => go("/projects") },
-        { type: "item", label: "Experience", shortcut: "⌘3", onSelect: () => go("/experience") },
-        { type: "item", label: "Achievements", shortcut: "⌘4", onSelect: () => go("/achievements") },
-        { type: "item", label: "Blog", shortcut: "⌘5", onSelect: () => go("/blog") },
+        { type: "item", label: "Show Desktop", shortcut: "⌘1", onSelect: () => { closeAll(); setOpen(null); } },
+        { type: "item", label: "Projects", shortcut: "⌘2", onSelect: () => openApp("projects") },
+        { type: "item", label: "Experience", shortcut: "⌘3", onSelect: () => openApp("experience") },
+        { type: "item", label: "Achievements", shortcut: "⌘4", onSelect: () => openApp("achievements") },
+        { type: "item", label: "Blog", shortcut: "⌘5", onSelect: () => openApp("blog") },
+        { type: "separator" },
+        { type: "item", label: "System Specs…", onSelect: () => { setAboutOpen(true); setOpen(null); } },
       ],
     },
     {
@@ -94,11 +129,19 @@ export function MenuBar() {
       items: [
         { type: "item", label: "New Message…", shortcut: "⌘N", onSelect: () => external("mailto:gsomil93@gmail.com") },
         { type: "item", label: "Download Resume", shortcut: "⌘S", onSelect: downloadResume },
+        { type: "item", label: "Print…", shortcut: "⌘P", onSelect: () => { setOpen(null); window.setTimeout(() => window.print(), 80); } },
         { type: "separator" },
         { type: "item", label: "Open GitHub", onSelect: () => external("https://github.com/Somilg11") },
         { type: "item", label: "Open Codolio", onSelect: () => external("https://codolio.com/profile/strangecodes") },
         { type: "separator" },
         { type: "item", label: "Copy Page Link", onSelect: () => copy(window.location.href, "Link") },
+        {
+          type: "item",
+          label: "Close Window",
+          shortcut: "⌘W",
+          disabled: !focused,
+          onSelect: () => { if (focused) closeWindow(focused); setOpen(null); },
+        },
       ],
     },
     {
@@ -110,12 +153,40 @@ export function MenuBar() {
         { type: "separator" },
         { type: "item", label: "Interface Sounds", checked: soundOn, onSelect: () => { setSoundOn(!soundOn); setOpen(null); } },
         { type: "separator" },
-        { type: "item", label: "System Specs…", onSelect: () => { setAboutOpen(true); setOpen(null); } },
+        {
+          type: "item",
+          label: "Zoom Window",
+          shortcut: "⌃⌘Z",
+          disabled: !focused,
+          onSelect: () => { if (focused) toggleMaximize(focused); setOpen(null); },
+        },
+        {
+          type: "item",
+          label: "Hide All Windows",
+          shortcut: "⌥⌘H",
+          disabled: windows.length === 0,
+          onSelect: () => { minimizeAll(); setOpen(null); },
+        },
+        {
+          type: "item",
+          label: "Close All Windows",
+          disabled: windows.length === 0,
+          onSelect: () => { closeAll(); setOpen(null); },
+        },
+        { type: "separator" },
+        {
+          type: "item",
+          label: fullscreen ? "Exit Full Screen" : "Enter Full Screen",
+          shortcut: "⌃⌘F",
+          onSelect: () => { toggleFullscreen(); setOpen(null); },
+        },
       ],
     },
     {
       label: "Help",
       items: [
+        { type: "item", label: "Keyboard Shortcuts", shortcut: "?", onSelect: () => openApp("shortcuts") },
+        { type: "separator" },
         { type: "item", label: "Email — gsomil93@gmail.com", onSelect: () => external("mailto:gsomil93@gmail.com") },
         { type: "item", label: "GitHub — @Somilg11", onSelect: () => external("https://github.com/Somilg11") },
         { type: "item", label: "LinkedIn — somil-1101s", onSelect: () => external("https://www.linkedin.com/in/somil-1101s/") },
@@ -153,8 +224,18 @@ export function MenuBar() {
             <button
               type="button"
               data-sound="none"
-              onClick={() => { play(open === menu.label ? "close" : "open"); setOpen(open === menu.label ? null : menu.label); }}
-              onMouseEnter={() => { if (open && open !== menu.label) { play("tick"); setOpen(menu.label); } }}
+              onClick={(e) => {
+                play(open === menu.label ? "close" : "open");
+                setMenuLeft(e.currentTarget.getBoundingClientRect().left);
+                setOpen(open === menu.label ? null : menu.label);
+              }}
+              onMouseEnter={(e) => {
+                if (open && open !== menu.label) {
+                  play("tick");
+                  setMenuLeft(e.currentTarget.getBoundingClientRect().left);
+                  setOpen(menu.label);
+                }
+              }}
               className={cn(
                 "rounded-[5px] px-2 py-[3px] leading-none transition-colors",
                 menu.bold && "font-semibold",
@@ -164,41 +245,54 @@ export function MenuBar() {
               {menu.icon ?? menu.label}
             </button>
 
-            <AnimatePresence>
-              {open === menu.label && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                  transition={{ duration: 0.13, ease: [0.32, 0.72, 0, 1] }}
-                  className="mac-vibrancy absolute left-0 top-[calc(100%+4px)] min-w-[230px] origin-top-left rounded-mac p-1 shadow-mac-3"
-                >
-                  {menu.items.map((item, i) =>
-                    item.type === "separator" ? (
-                      <div key={i} className="mac-hairline my-1 h-px" />
-                    ) : (
-                      <button
-                        key={i}
-                        type="button"
-                        data-sound="none"
-                        onClick={() => { play("click"); item.onSelect(); }}
-                        className="group flex w-full items-center gap-2 rounded-[5px] px-2 py-[5px] text-left text-[13px] transition-colors hover:bg-primary hover:text-primary-foreground"
-                      >
-                        <span className="w-3 shrink-0">
-                          {item.checked && <Check size={12} strokeWidth={3} />}
-                        </span>
-                        <span className="flex-1">{item.label}</span>
-                        {item.shortcut && (
-                          <span className="text-[12px] text-muted-foreground group-hover:text-primary-foreground/70">
-                            {item.shortcut}
-                          </span>
-                        )}
-                      </button>
-                    )
+            {mounted &&
+              createPortal(
+                <AnimatePresence>
+                  {open === menu.label && (
+                    <motion.div
+                      key="menu"
+                      initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                      transition={{ duration: 0.13, ease: [0.32, 0.72, 0, 1] }}
+                      style={{ left: Math.min(menuLeft, window.innerWidth - 250) }}
+                      data-menu-dropdown
+                      className="mac-vibrancy fixed top-[32px] z-[120] min-w-[240px] origin-top-left rounded-mac p-1 shadow-mac-3"
+                    >
+                      {menu.items.map((item, i) =>
+                        item.type === "separator" ? (
+                          <div key={i} className="mac-hairline my-1 h-px" />
+                        ) : (
+                          <button
+                            key={i}
+                            type="button"
+                            data-sound="none"
+                            disabled={item.disabled}
+                            onClick={() => { play("click"); item.onSelect(); }}
+                            className={cn(
+                              "group flex w-full items-center gap-2 rounded-[5px] px-2 py-[5px] text-left text-[13px] transition-colors",
+                              item.disabled
+                                ? "cursor-default text-muted-foreground/50"
+                                : "hover:bg-primary hover:text-primary-foreground"
+                            )}
+                          >
+                            <span className="w-3 shrink-0">
+                              {item.checked && <Check size={12} strokeWidth={3} />}
+                            </span>
+                            <span className="flex-1">{item.label}</span>
+                            {item.shortcut && (
+                              <span className="text-[12px] text-muted-foreground group-hover:text-primary-foreground/70">
+                                {item.shortcut}
+                              </span>
+                            )}
+                          </button>
+                        )
+                      )}
+                    </motion.div>
                   )}
-                </motion.div>
+                </AnimatePresence>,
+                document.body
               )}
-            </AnimatePresence>
           </div>
         ))}
 

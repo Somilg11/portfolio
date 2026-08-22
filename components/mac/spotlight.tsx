@@ -1,21 +1,22 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, Mail, Volume2 } from "lucide-react";
-import { ModeIcon, SearchIcon, WorkIcon } from "./asset-icons";
-import { FinderGlyph, FolderGlyph, NotesGlyph, TrophyGlyph } from "./glyphs";
+import { Download, Volume2 } from "lucide-react";
+import { ModeIcon, SearchIcon } from "./asset-icons";
+import { AssetIcon } from "./app-icon";
+import { FinderGlyph, FolderGlyph } from "./glyphs";
 import { projectData } from "@/data/projectData";
 import { useSound } from "@/components/sound-provider";
+import { useWindows } from "@/components/windows/window-manager";
 import { cn } from "@/lib/utils";
 
 type Result = {
   id: string;
   label: string;
   hint: string;
-  group: "Pages" | "Projects" | "Actions";
+  group: "Apps" | "Notes" | "Projects" | "Actions";
   icon: React.ReactNode;
   run: () => void;
 };
@@ -27,7 +28,7 @@ export function Spotlight() {
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const router = useRouter();
+  const { open: openWindow, closeAll, posts, close: closeWindow, toggleMinimize, focused } = useWindows();
   const { setTheme, resolvedTheme } = useTheme();
   const { play, enabled: soundOn, setEnabled: setSoundOn } = useSound();
 
@@ -38,18 +39,28 @@ export function Spotlight() {
   }, []);
 
   const results = useMemo<Result[]>(() => {
-    const go = (href: string) => () => {
-      play("swoosh");
-      router.push(href);
+    const openApp = (id: Parameters<typeof openWindow>[0]) => () => {
+      openWindow(id);
       close();
     };
 
     const pages: Result[] = [
-      { id: "home", label: "Home", hint: "⌘1", group: "Pages", icon: <FinderGlyph size={16} />, run: go("/") },
-      { id: "projects", label: "Projects", hint: "⌘2", group: "Pages", icon: <FolderGlyph size={16} />, run: go("/projects") },
-      { id: "experience", label: "Experience", hint: "⌘3", group: "Pages", icon: <WorkIcon size={15} />, run: go("/experience") },
-      { id: "achievements", label: "Achievements", hint: "⌘4", group: "Pages", icon: <TrophyGlyph size={16} />, run: go("/achievements") },
-      { id: "blog", label: "Blog", hint: "⌘5", group: "Pages", icon: <NotesGlyph size={16} />, run: go("/blog") },
+      {
+        id: "home",
+        label: "Show Desktop",
+        hint: "⌘1",
+        group: "Apps",
+        icon: <FinderGlyph size={16} />,
+        run: () => {
+          closeAll();
+          close();
+        },
+      },
+      { id: "projects", label: "Projects", hint: "⌘2", group: "Apps", icon: <FolderGlyph size={16} />, run: openApp("projects") },
+      { id: "experience", label: "Experience", hint: "⌘3", group: "Apps", icon: <AssetIcon src="/mac-assets/images/experience.png" size={17} />, run: openApp("experience") },
+      { id: "achievements", label: "Achievements", hint: "⌘4", group: "Apps", icon: <AssetIcon src="/mac-assets/images/achievement.png" size={17} />, run: openApp("achievements") },
+      { id: "blog", label: "Blog", hint: "⌘5", group: "Apps", icon: <AssetIcon src="/mac-assets/images/blog.png" size={17} />, run: openApp("blog") },
+      { id: "shortcuts", label: "Keyboard Shortcuts", hint: "Help", group: "Apps", icon: <FinderGlyph size={16} />, run: openApp("shortcuts") },
     ];
 
     const projects: Result[] = projectData.map((project) => ({
@@ -63,6 +74,15 @@ export function Spotlight() {
         window.open(project.live || project.url, "_blank", "noopener,noreferrer");
         close();
       },
+    }));
+
+    const notes: Result[] = posts.map((post) => ({
+      id: `post-${post.slug}`,
+      label: post.title,
+      hint: "Note",
+      group: "Notes",
+      icon: <AssetIcon src="/mac-assets/images/blog.png" size={17} />,
+      run: openApp(`post:${post.slug}`),
     }));
 
     const actions: Result[] = [
@@ -86,7 +106,7 @@ export function Spotlight() {
         label: "Email Somil",
         hint: "gsomil93@gmail.com",
         group: "Actions",
-        icon: <Mail size={15} />,
+        icon: <AssetIcon src="/mac-assets/images/mail.png" size={17} />,
         run: () => {
           window.location.href = "mailto:gsomil93@gmail.com";
           close();
@@ -117,12 +137,12 @@ export function Spotlight() {
       },
     ];
 
-    const all = [...pages, ...projects, ...actions];
+    const all = [...pages, ...notes, ...projects, ...actions];
     if (!query.trim()) return [...pages, ...actions];
 
     const q = query.toLowerCase();
     return all.filter((r) => r.label.toLowerCase().includes(q) || r.group.toLowerCase().includes(q));
-  }, [query, router, play, close, resolvedTheme, setTheme, soundOn, setSoundOn]);
+  }, [query, play, close, resolvedTheme, setTheme, soundOn, setSoundOn, openWindow, closeAll, posts]);
 
   // Global shortcuts: ⌘K opens, ⌘1–5 navigate, ⌘S grabs the resume.
   useEffect(() => {
@@ -138,9 +158,30 @@ export function Spotlight() {
 
       if (meta && ["1", "2", "3", "4", "5"].includes(e.key)) {
         e.preventDefault();
-        const routes = ["/", "/projects", "/experience", "/achievements", "/blog"];
-        play("swoosh");
-        router.push(routes[Number(e.key) - 1]);
+        if (e.key === "1") {
+          closeAll();
+          return;
+        }
+        const apps = ["projects", "experience", "achievements", "blog"] as const;
+        openWindow(apps[Number(e.key) - 2]);
+        return;
+      }
+
+      if (meta && e.key.toLowerCase() === "w" && focused) {
+        e.preventDefault();
+        closeWindow(focused);
+        return;
+      }
+
+      if (meta && e.key.toLowerCase() === "m" && focused) {
+        e.preventDefault();
+        toggleMinimize(focused);
+        return;
+      }
+
+      if (meta && e.key.toLowerCase() === "h" && e.altKey) {
+        e.preventDefault();
+        closeAll();
         return;
       }
 
@@ -165,7 +206,7 @@ export function Spotlight() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("mac:spotlight", onSpotlight);
     };
-  }, [open, play, router]);
+  }, [open, play, openWindow, closeAll, closeWindow, toggleMinimize, focused]);
 
   useEffect(() => {
     if (open) window.setTimeout(() => inputRef.current?.focus(), 40);

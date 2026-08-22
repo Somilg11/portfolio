@@ -6,6 +6,9 @@ import { SoundProvider } from "@/components/sound-provider";
 import { MenuBar } from "@/components/mac/menu-bar";
 import { Dock } from "@/components/mac/dock";
 import { Spotlight } from "@/components/mac/spotlight";
+import { WindowProvider } from "@/components/windows/window-manager";
+import { WindowLayer } from "@/components/windows/window-layer";
+import { getPosts } from "@/lib/posts";
 import { SITE_URL } from "./robots";
 
 // SF ships with macOS/iOS; Geist is only the fallback elsewhere, so it is
@@ -122,11 +125,15 @@ const personJsonLd = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Post bodies are handed to the client so the Blog window can open
+  // instantly, without a round trip per note.
+  const posts = await getPosts();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -150,15 +157,18 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SoundProvider>
-            {/* Desktop surface — flat colour, no image assets */}
-            <div className="mac-desktop" aria-hidden />
+            <WindowProvider posts={posts}>
+              {/* Desktop surface — flat colour, no image assets */}
+              <div className="mac-desktop" aria-hidden />
 
-            <MenuBar />
+              <MenuBar />
 
-            <div className="min-h-[calc(100vh-1.75rem)] pt-7 pb-20">{children}</div>
+              <div className="min-h-[calc(100vh-1.75rem)] pb-20 pt-7">{children}</div>
 
-            <Dock />
-            <Spotlight />
+              <WindowLayer />
+              <Dock />
+              <Spotlight />
+            </WindowProvider>
           </SoundProvider>
         </ThemeProvider>
       </body>

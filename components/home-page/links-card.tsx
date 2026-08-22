@@ -2,17 +2,17 @@
 
 import React from "react";
 import { SiDiscord } from "react-icons/si";
-import { ContactGlyph, MailGlyph } from "@/components/mac/glyphs";
+import { ContactGlyph } from "@/components/mac/glyphs";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/mac/asset-icons";
 import { MacWindow } from "@/components/mac/window";
-import { AppIcon, type Tone } from "@/components/mac/app-icon";
+import { AppIcon, AssetIcon, type Tone } from "@/components/mac/app-icon";
 
-type Tile = { href: string; label: string; tone: Tone; icon: React.ReactNode };
+type Tile = { href: string; label: string; tone?: Tone; icon?: React.ReactNode; image?: string };
 
 const tiles: Tile[] = [
   { href: "https://github.com/Somilg11", label: "GitHub", tone: "graphite", icon: <GithubIcon size={19} /> },
   { href: "https://x.com/somil_1101", label: "X", tone: "graphite", icon: <TwitterIcon size={17} /> },
-  { href: "mailto:gsomil93@gmail.com", label: "Mail", tone: "blue", icon: <MailGlyph size={19} /> },
+  { href: "mailto:gsomil93@gmail.com", label: "Mail", image: "/mac-assets/images/mail.png" },
   { href: "https://discord.com/kakashi_11_", label: "Discord", tone: "indigo", icon: <SiDiscord size={15} /> },
   { href: "https://www.linkedin.com/in/somil-1101s/", label: "LinkedIn", tone: "blue", icon: <LinkedinIcon size={19} /> },
   { href: "https://codolio.com/profile/strangecodes", label: "Codolio", tone: "teal", icon: <ContactGlyph size={19} /> },
@@ -31,13 +31,21 @@ export default function LinksCard() {
             title={tile.label}
             className="group flex flex-col items-center gap-1 rounded-mac p-1.5 transition-colors duration-150 hover:bg-foreground/[0.05]"
           >
-            <AppIcon
-              tone={tile.tone}
-              size="md"
-              className="transition-transform duration-150 ease-mac-spring group-hover:-translate-y-0.5 group-active:scale-95"
-            >
-              {tile.icon}
-            </AppIcon>
+            {tile.image ? (
+              <AssetIcon
+                src={tile.image}
+                size={36}
+                className="transition-transform duration-150 ease-mac-spring group-hover:-translate-y-0.5 group-active:scale-95"
+              />
+            ) : (
+              <AppIcon
+                tone={tile.tone ?? "graphite"}
+                size="md"
+                className="transition-transform duration-150 ease-mac-spring group-hover:-translate-y-0.5 group-active:scale-95"
+              >
+                {tile.icon}
+              </AppIcon>
+            )}
             <span className="text-[10.5px] leading-none text-muted-foreground group-hover:text-foreground">
               {tile.label}
             </span>

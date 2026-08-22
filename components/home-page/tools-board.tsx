@@ -2,16 +2,16 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { useTheme } from "next-themes";
 import { GitBranch } from "lucide-react";
-import { CaseGlyph, DocGlyph, NotesGlyph, TrophyGlyph } from "@/components/mac/glyphs";
 import { SiClaudecode, SiDiscord, SiGithub, SiNotion, SiOpencode, SiPostman } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
 import { MacWindow } from "@/components/mac/window";
 import DotField from "@/components/home-page/dot-field";
-import { AppIcon, type Tone } from "@/components/mac/app-icon";
+import { AppIcon, AssetIcon, type Tone } from "@/components/mac/app-icon";
 import { projectData } from "@/data/projectData";
+import { useWindows } from "@/components/windows/window-manager";
+import type { WindowId } from "@/components/windows/types";
 
 type RailItem = { label: string; icon: React.ReactNode; link: string; tone: Tone };
 
@@ -81,9 +81,9 @@ export default function ToolsBoard() {
               </div>
             </Card>
 
-            <NavCard href="/blog" tone="yellow" icon={<NotesGlyph size={17} />} title="Blog" caption="notes & deep dives" />
-            <NavCard href="/experience" tone="indigo" icon={<CaseGlyph size={17} />} title="Experience" caption="2023 — present" />
-            <NavCard href="/achievements" tone="orange" icon={<TrophyGlyph size={17} />} title="Achievements" caption="wins & finals" />
+            <NavCard window="blog" image="/mac-assets/images/blog.png" title="Blog" caption="notes & deep dives" />
+            <NavCard window="experience" image="/mac-assets/images/experience.png" title="Experience" caption="2023 — present" />
+            <NavCard window="achievements" image="/mac-assets/images/achievement.png" title="Achievements" caption="wins & finals" />
 
             <Card
               as="button"
@@ -95,7 +95,7 @@ export default function ToolsBoard() {
               }}
               sound="success"
             >
-              <Row tone="red" icon={<DocGlyph size={17} />} title="Resume" caption="download PDF" />
+              <Row image="/mac-assets/images/pdf.png" title="Resume" caption="download PDF" />
             </Card>
 
             {/* Contributions */}
@@ -129,19 +129,25 @@ export default function ToolsBoard() {
 function Row({
   tone,
   icon,
+  image,
   title,
   caption,
 }: {
-  tone: Tone;
-  icon: React.ReactNode;
+  tone?: Tone;
+  icon?: React.ReactNode;
+  image?: string;
   title: string;
   caption: string;
 }) {
   return (
     <div className="flex items-center gap-2.5 text-left">
-      <AppIcon tone={tone} size="sm">
-        {icon}
-      </AppIcon>
+      {image ? (
+        <AssetIcon src={image} size={32} />
+      ) : (
+        <AppIcon tone={tone ?? "graphite"} size="sm">
+          {icon}
+        </AppIcon>
+      )}
       <div className="min-w-0">
         <div className="truncate text-[13.5px] font-medium leading-tight">{title}</div>
         <div className="truncate text-[11.5px] leading-tight text-muted-foreground">{caption}</div>
@@ -151,26 +157,31 @@ function Row({
 }
 
 function NavCard({
-  href,
+  window: windowId,
   tone,
   icon,
+  image,
   title,
   caption,
 }: {
-  href: string;
-  tone: Tone;
-  icon: React.ReactNode;
+  window: WindowId;
+  tone?: Tone;
+  icon?: React.ReactNode;
+  image?: string;
   title: string;
   caption: string;
 }) {
+  const { open } = useWindows();
+
   return (
-    <Link
-      href={href}
-      data-sound="swoosh"
-      className="min-w-0 rounded-mac border border-border bg-background/40 p-2.5 transition-colors duration-150 hover:bg-foreground/[0.04] active:scale-[0.99]"
+    <button
+      type="button"
+      data-sound="none"
+      onClick={() => open(windowId)}
+      className="min-w-0 rounded-mac border border-border bg-background/40 p-2.5 text-left transition-colors duration-150 hover:bg-foreground/[0.04] active:scale-[0.99]"
     >
-      <Row tone={tone} icon={icon} title={title} caption={caption} />
-    </Link>
+      <Row tone={tone} icon={icon} image={image} title={title} caption={caption} />
+    </button>
   );
 }
 

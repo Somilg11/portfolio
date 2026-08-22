@@ -1,8 +1,7 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import React from "react";
 import type { Metadata } from "next";
-import { BlogListClient } from "@/components/blog/blog-list-client";
+import { getPosts } from "@/lib/posts";
+import { HomeBento } from "@/components/home-page/home-bento";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -17,25 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
-  const blogDir = path.join(process.cwd(), "content/blog");
-  const files = fs.readdirSync(blogDir);
-
-  const posts = files
-    .map((filename) => {
-      const slug = filename.replace(".md", "");
-      const fileContent = fs.readFileSync(path.join(blogDir, filename), "utf-8");
-      const { data } = matter(fileContent);
-
-      return {
-        slug,
-        title: data.title,
-        description: data.description,
-        date: data.date,
-        tags: data.tags || [],
-      };
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  return <BlogListClient posts={posts} />;
+export default async function BlogPage() {
+  const posts = await getPosts();
+  return <HomeBento notes={posts.slice(0, 3).map(({ slug, title, date }) => ({ slug, title, date }))} />;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { TrafficLights } from "./traffic-lights";
@@ -14,8 +13,8 @@ type MacWindowProps = {
   icon?: React.ReactNode;
   /** Right-hand toolbar content. */
   toolbar?: React.ReactNode;
-  /** Where the green zoom button takes you. */
-  href?: string;
+  /** What the green zoom button does — usually opens the matching app window. */
+  onZoom?: () => void;
   children: React.ReactNode;
   className?: string;
   bodyClassName?: string;
@@ -31,7 +30,7 @@ export function MacWindow({
   title,
   icon,
   toolbar,
-  href,
+  onZoom,
   children,
   className,
   bodyClassName,
@@ -41,7 +40,6 @@ export function MacWindow({
 }: MacWindowProps) {
   const [minimized, setMinimized] = useState(false);
   const [shaking, setShaking] = useState(false);
-  const router = useRouter();
   const { play } = useSound();
 
   const handleClose = () => {
@@ -51,9 +49,8 @@ export function MacWindow({
   };
 
   const handleZoom = () => {
-    if (href) {
-      play("swoosh");
-      router.push(href);
+    if (onZoom) {
+      onZoom();
     } else {
       play("pop");
     }

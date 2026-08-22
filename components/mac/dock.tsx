@@ -2,14 +2,13 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
-import { GithubIcon, LinkedinIcon, TwitterIcon, WorkIcon } from "./asset-icons";
-import { TrophyGlyph } from "./glyphs";
+import { GithubIcon, LinkedinIcon, TwitterIcon } from "./asset-icons";
 import type { Tone } from "./app-icon";
+import { useWindows } from "@/components/windows/window-manager";
+import type { WindowId } from "@/components/windows/types";
 
 type DockItem = {
   label: string;
@@ -18,7 +17,10 @@ type DockItem = {
   /** Fallback: monochrome glyph on a tinted tile. */
   icon?: React.ReactNode;
   tone?: Tone;
-  href?: string;
+  /** Opens an app window instead of navigating. */
+  window?: WindowId;
+  /** Closes every window and shows the desktop. */
+  desktop?: boolean;
   external?: string;
   download?: boolean;
   /** Nothing to empty — shakes and buzzes instead. */
@@ -39,12 +41,12 @@ const tones: Record<Tone, string> = {
 };
 
 const items: DockItem[] = [
-  { label: "Home", image: "/mac-assets/images/finder.png", href: "/" },
-  { label: "Projects", image: "/mac-assets/images/folder.png", href: "/projects" },
-  { label: "Experience", icon: <WorkIcon size={19} />, tone: "indigo", href: "/experience" },
-  { label: "Achievements", icon: <TrophyGlyph size={19} />, tone: "orange", href: "/achievements" },
-  { label: "Blog", image: "/mac-assets/images/safari.png", href: "/blog" },
-  { label: "Contact", image: "/mac-assets/images/contact.png", external: "mailto:gsomil93@gmail.com" },
+  { label: "Desktop", image: "/mac-assets/images/finder.png", desktop: true },
+  { label: "Projects", image: "/mac-assets/images/folder.png", window: "projects" },
+  { label: "Experience", image: "/mac-assets/images/experience.png", window: "experience" },
+  { label: "Achievements", image: "/mac-assets/images/achievement.png", window: "achievements" },
+  { label: "Blog", image: "/mac-assets/images/blog.png", window: "blog" },
+  { label: "Mail", image: "/mac-assets/images/mail.png", external: "mailto:gsomil93@gmail.com" },
   { label: "GitHub", icon: <GithubIcon size={19} />, tone: "graphite", external: "https://github.com/Somilg11" },
   { label: "LinkedIn", icon: <LinkedinIcon size={19} />, tone: "blue", external: "https://www.linkedin.com/in/somil-1101s/" },
   { label: "X", icon: <TwitterIcon size={17} />, tone: "graphite", external: "https://x.com/somil_1101" },
@@ -68,8 +70,8 @@ function useCompactDock() {
 
 export function Dock() {
   const mouseX = useMotionValue(Infinity);
-  const pathname = usePathname();
   const compact = useCompactDock();
+  const { windows } = useWindows();
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center pb-2">
@@ -88,7 +90,7 @@ export function Dock() {
             item={item}
             mouseX={mouseX}
             compact={compact}
-            active={!!item.href && (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href))}
+            active={!!item.window && windows.some((w) => w.id === item.window)}
             separatorBefore={i === 6 || i === 10}
           />
         ))}
@@ -115,6 +117,7 @@ function DockIcon({
   const [bouncing, setBouncing] = useState(false);
   const [shaking, setShaking] = useState(false);
   const { play } = useSound();
+  const { open, closeAll, windows, toggleMinimize } = useWindows();
 
   const distance = useTransform(mouseX, (x) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -128,6 +131,25 @@ function DockIcon({
   const radius = useTransform(size, (s) => s * 0.27);
 
   const launch = () => {
+    if (item.window) {
+      const existing = windows.find((w) => w.id === item.window);
+      if (existing && !existing.minimized) {
+        // Clicking a running app's icon tucks it away again.
+        toggleMinimize(item.window);
+        play("close");
+        return;
+      }
+      open(item.window);
+      setBouncing(true);
+      window.setTimeout(() => setBouncing(false), 700);
+      return;
+    }
+
+    if (item.desktop) {
+      closeAll();
+      return;
+    }
+
     if (item.refuse) {
       play("error");
       setShaking(true);
@@ -150,6 +172,7 @@ function DockIcon({
   const tile = (
     <motion.div
       ref={ref}
+      data-dock-id={item.window ?? item.label.toLowerCase()}
       style={item.image ? { width: size, height: size } : { width: size, height: size, borderRadius: radius }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -173,7 +196,7 @@ function DockIcon({
           height={58}
           draggable={false}
           decoding="async"
-          className="h-full w-full select-none object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
+          className="h-full w-full select-none rounded-[23%] object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
         />
       ) : (
         item.icon
@@ -196,11 +219,7 @@ function DockIcon({
     </motion.div>
   );
 
-  const wrapped = item.href ? (
-    <Link href={item.href} aria-label={item.label} data-sound="none">
-      {tile}
-    </Link>
-  ) : item.external ? (
+  const wrapped = item.external ? (
     <a
       href={item.external}
       target={item.external.startsWith("mailto:") ? undefined : "_blank"}
