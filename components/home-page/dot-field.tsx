@@ -85,7 +85,7 @@ export default function DotField({ className = "", gap = 8, pixel = 2 }: DotFiel
         }
       }
 
-      raf = window.requestAnimationFrame(draw);
+      if (running) raf = window.requestAnimationFrame(draw);
     };
 
     const onPointerMove = (e: PointerEvent) => {
@@ -97,7 +97,24 @@ export default function DotField({ className = "", gap = 8, pixel = 2 }: DotFiel
     };
 
     resize();
-    raf = window.requestAnimationFrame(draw);
+
+    // Only burn frames while the field is actually on screen.
+    let running = false;
+    const setRunning = (next: boolean) => {
+      if (next === running) return;
+      running = next;
+      if (running) {
+        start = 0;
+        raf = window.requestAnimationFrame(draw);
+      } else {
+        window.cancelAnimationFrame(raf);
+      }
+    };
+
+    const visibility = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting), {
+      rootMargin: "120px",
+    });
+    visibility.observe(canvas);
 
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
@@ -106,6 +123,7 @@ export default function DotField({ className = "", gap = 8, pixel = 2 }: DotFiel
 
     return () => {
       window.cancelAnimationFrame(raf);
+      visibility.disconnect();
       observer.disconnect();
       canvas.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerleave", onPointerLeave);

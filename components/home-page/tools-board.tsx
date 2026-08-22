@@ -109,7 +109,11 @@ export default function ToolsBoard() {
               <div className="min-w-0 overflow-hidden">
                 <img
                   src={`https://ghchart.rshah.org/${chartColor}/Somilg11`}
-                  alt="GitHub contributions"
+                  alt="GitHub contribution graph for Somilg11"
+                  width={720}
+                  height={110}
+                  loading="lazy"
+                  decoding="async"
                   className="pointer-events-none h-auto max-h-[76px] w-full min-w-0 object-contain dark:invert dark:hue-rotate-180"
                 />
               </div>

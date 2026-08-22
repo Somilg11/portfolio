@@ -44,7 +44,10 @@ export default function ProfileCard() {
         <div className="relative shrink-0">
           <img
             src="/myprofileimage.png"
-            alt="Somil"
+            alt="Somil Gupta"
+            width={60}
+            height={60}
+            fetchPriority="high"
             className="h-[60px] w-[60px] rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10"
           />
           <span className="absolute bottom-0.5 right-0.5 h-3 w-3 rounded-full border-2 border-card bg-emerald-500" />

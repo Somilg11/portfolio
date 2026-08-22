@@ -3,7 +3,8 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, Search } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
+import { SearchIcon } from "@/components/mac/asset-icons";
 import { PageWindow } from "@/components/mac/page-window";
 
 interface BlogPost {
@@ -32,7 +33,7 @@ export function BlogListClient({ posts }: { posts: BlogPost[] }) {
       bodyClassName="p-0"
       toolbar={
         <div className="relative hidden sm:block sm:w-[200px]">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -46,7 +47,7 @@ export function BlogListClient({ posts }: { posts: BlogPost[] }) {
       <div className="p-3 sm:p-5">
         {/* mobile search */}
         <div className="relative mb-4 sm:hidden">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}

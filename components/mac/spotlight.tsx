@@ -4,18 +4,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Briefcase,
-  Download,
-  Folder,
-  Home,
-  Mail,
-  Moon,
-  Newspaper,
-  Search,
-  Trophy,
-  Volume2,
-} from "lucide-react";
+import { Download, Mail, Volume2 } from "lucide-react";
+import { ModeIcon, SearchIcon, WorkIcon } from "./asset-icons";
+import { FinderGlyph, FolderGlyph, NotesGlyph, TrophyGlyph } from "./glyphs";
 import { projectData } from "@/data/projectData";
 import { useSound } from "@/components/sound-provider";
 import { cn } from "@/lib/utils";
@@ -54,11 +45,11 @@ export function Spotlight() {
     };
 
     const pages: Result[] = [
-      { id: "home", label: "Home", hint: "⌘1", group: "Pages", icon: <Home size={15} />, run: go("/") },
-      { id: "projects", label: "Projects", hint: "⌘2", group: "Pages", icon: <Folder size={15} />, run: go("/projects") },
-      { id: "experience", label: "Experience", hint: "⌘3", group: "Pages", icon: <Briefcase size={15} />, run: go("/experience") },
-      { id: "achievements", label: "Achievements", hint: "⌘4", group: "Pages", icon: <Trophy size={15} />, run: go("/achievements") },
-      { id: "blog", label: "Blog", hint: "⌘5", group: "Pages", icon: <Newspaper size={15} />, run: go("/blog") },
+      { id: "home", label: "Home", hint: "⌘1", group: "Pages", icon: <FinderGlyph size={16} />, run: go("/") },
+      { id: "projects", label: "Projects", hint: "⌘2", group: "Pages", icon: <FolderGlyph size={16} />, run: go("/projects") },
+      { id: "experience", label: "Experience", hint: "⌘3", group: "Pages", icon: <WorkIcon size={15} />, run: go("/experience") },
+      { id: "achievements", label: "Achievements", hint: "⌘4", group: "Pages", icon: <TrophyGlyph size={16} />, run: go("/achievements") },
+      { id: "blog", label: "Blog", hint: "⌘5", group: "Pages", icon: <NotesGlyph size={16} />, run: go("/blog") },
     ];
 
     const projects: Result[] = projectData.map((project) => ({
@@ -66,7 +57,7 @@ export function Spotlight() {
       label: project.title,
       hint: "Project",
       group: "Projects",
-      icon: <Folder size={15} />,
+      icon: <FolderGlyph size={16} />,
       run: () => {
         play("swoosh");
         window.open(project.live || project.url, "_blank", "noopener,noreferrer");
@@ -106,7 +97,7 @@ export function Spotlight() {
         label: resolvedTheme === "dark" ? "Switch to Light Appearance" : "Switch to Dark Appearance",
         hint: "Appearance",
         group: "Actions",
-        icon: <Moon size={15} />,
+        icon: <ModeIcon size={15} />,
         run: () => {
           setTheme(resolvedTheme === "dark" ? "light" : "dark");
           play("toggle");
@@ -225,7 +216,7 @@ export function Spotlight() {
             className="mac-vibrancy w-full max-w-[560px] overflow-hidden rounded-2xl shadow-mac-3"
           >
             <div className="flex items-center gap-3 px-4 py-3">
-              <Search size={18} className="shrink-0 text-muted-foreground" />
+              <SearchIcon size={18} className="shrink-0 text-muted-foreground" />
               <input
                 ref={inputRef}
                 value={query}

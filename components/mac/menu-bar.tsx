@@ -4,17 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  BatteryMedium,
-  Check,
-  Command,
-  Moon,
-  Search,
-  Sun,
-  Volume2,
-  VolumeX,
-  Wifi,
-} from "lucide-react";
+import { BatteryMedium, Check, Command, Volume2, VolumeX } from "lucide-react";
+import { ModeIcon, SearchIcon, WifiIcon } from "./asset-icons";
 import { SiApple } from "react-icons/si";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
@@ -240,7 +231,7 @@ export function MenuBar() {
           <ThemeSwitch />
 
           <BatteryMedium size={16} className="hidden sm:block" />
-          <Wifi size={14} className="hidden sm:block" />
+          <WifiIcon size={15} className="hidden sm:block" />
           <button
             type="button"
             data-sound="open"
@@ -249,7 +240,7 @@ export function MenuBar() {
             onClick={() => window.dispatchEvent(new CustomEvent("mac:spotlight"))}
             className="rounded-[5px] p-1 transition-colors hover:bg-foreground/10"
           >
-            <Search size={13} />
+            <SearchIcon size={14} />
           </button>
           <Command size={13} className="hidden sm:block" />
 
@@ -286,9 +277,9 @@ function ThemeSwitch() {
         initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
         animate={{ rotate: 0, opacity: 1, scale: 1 }}
         transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
-        className="block"
+        className={isDark ? "block" : "block rotate-180"}
       >
-        {isDark ? <Moon size={14} /> : <Sun size={14} />}
+        <ModeIcon size={14} />
       </motion.span>
     </button>
   );

@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { ArrowLeft, Calendar, Check, Share2 } from "lucide-react";
+import { ArrowLeft, Calendar, Check } from "lucide-react";
+import { ShareIcon } from "@/components/mac/asset-icons";
 import { TrafficLights } from "@/components/mac/traffic-lights";
 import { useSound } from "@/components/sound-provider";
 
@@ -61,7 +62,7 @@ export function PostClientWrapper({ data, contentHtml }: { data: PostData; conte
             data-sound="none"
             className="mac-button ml-auto gap-1.5"
           >
-            {copied ? <Check size={13} className="text-emerald-500" /> : <Share2 size={13} />}
+            {copied ? <Check size={13} className="text-emerald-500" /> : <ShareIcon size={13} />}
             <span className="hidden sm:inline">{copied ? "Copied" : "Share"}</span>
           </button>
 

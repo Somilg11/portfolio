@@ -6,6 +6,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { TrafficLights } from "./traffic-lights";
 import { useSound } from "@/components/sound-provider";
+import { InfoIcon } from "./asset-icons";
 
 const overview: [string, string][] = [
   ["Model", "Somil Gupta · Full-Stack Engineer"],
@@ -76,7 +77,9 @@ export function AboutDialog({ open, onOpenChange }: { open: boolean; onOpenChang
               className="h-20 w-20 rounded-[18px] object-cover ring-1 ring-black/10 dark:ring-white/10"
             />
             <h2 className="mt-3 text-[19px] font-semibold tracking-tight">somil</h2>
-            <p className="text-[11.5px] text-muted-foreground">Portfolio 3.0 · build 2026.8</p>
+            <p className="flex items-center gap-1 text-[11.5px] text-muted-foreground">
+              <InfoIcon size={12} /> Portfolio 3.0 · build 2026.8
+            </p>
 
             <div className="mt-4 flex w-full items-center gap-0.5 rounded-[8px] border border-border bg-background/60 p-0.5">
               {tabs.map((t) => (

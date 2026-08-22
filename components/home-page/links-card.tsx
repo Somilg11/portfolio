@@ -1,20 +1,20 @@
 "use client";
 
 import React from "react";
-import { Github, Linkedin } from "lucide-react";
-import { SiDiscord, SiX } from "react-icons/si";
+import { SiDiscord } from "react-icons/si";
 import { ContactGlyph, MailGlyph } from "@/components/mac/glyphs";
+import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/mac/asset-icons";
 import { MacWindow } from "@/components/mac/window";
 import { AppIcon, type Tone } from "@/components/mac/app-icon";
 
 type Tile = { href: string; label: string; tone: Tone; icon: React.ReactNode };
 
 const tiles: Tile[] = [
-  { href: "https://github.com/Somilg11", label: "GitHub", tone: "graphite", icon: <Github size={17} /> },
-  { href: "https://x.com/somil_1101", label: "X", tone: "graphite", icon: <SiX size={14} /> },
+  { href: "https://github.com/Somilg11", label: "GitHub", tone: "graphite", icon: <GithubIcon size={19} /> },
+  { href: "https://x.com/somil_1101", label: "X", tone: "graphite", icon: <TwitterIcon size={17} /> },
   { href: "mailto:gsomil93@gmail.com", label: "Mail", tone: "blue", icon: <MailGlyph size={19} /> },
   { href: "https://discord.com/kakashi_11_", label: "Discord", tone: "indigo", icon: <SiDiscord size={15} /> },
-  { href: "https://www.linkedin.com/in/somil-1101s/", label: "LinkedIn", tone: "blue", icon: <Linkedin size={16} /> },
+  { href: "https://www.linkedin.com/in/somil-1101s/", label: "LinkedIn", tone: "blue", icon: <LinkedinIcon size={19} /> },
   { href: "https://codolio.com/profile/strangecodes", label: "Codolio", tone: "teal", icon: <ContactGlyph size={19} /> },
 ];
 

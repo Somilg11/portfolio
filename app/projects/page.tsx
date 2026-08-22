@@ -4,7 +4,8 @@ import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, LayoutGrid, List, Search } from "lucide-react";
+import { ExternalLink, Github, LayoutGrid, List } from "lucide-react";
+import { SearchIcon } from "@/components/mac/asset-icons";
 import { projectData } from "@/data/projectData";
 import { PageWindow } from "@/components/mac/page-window";
 import { TechBadge } from "@/components/tech-badge";
@@ -83,7 +84,7 @@ export default function ProjectsPage() {
         </div>
 
         <div className="relative sm:w-[230px]">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -203,17 +204,22 @@ function Thumb({ src, title, compact }: { src?: string; title: string; compact?:
       {show ? (
         <Image
           src={src}
-          alt={title}
+          alt={`${title} preview`}
           fill
-          unoptimized
+          sizes={compact ? "80px" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"}
           onError={() => setFailed(true)}
           className={cn("object-cover", !compact && "transition-transform duration-500 group-hover:scale-105")}
         />
       ) : (
-        <div className="flex h-full items-center justify-center">
-          <span className={cn("font-semibold text-muted-foreground", compact ? "text-[15px]" : "text-[28px]")}>
-            {title.slice(0, 2).toLowerCase()}
-          </span>
+        <div className="flex h-full flex-col items-center justify-center gap-1.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/mac-assets/images/image.png"
+            alt=""
+            loading="lazy"
+            className={cn("opacity-60", compact ? "h-7" : "h-12")}
+          />
+          {!compact && <span className="text-[11px] text-muted-foreground">no preview</span>}
         </div>
       )}
     </div>

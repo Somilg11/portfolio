@@ -1,23 +1,28 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
-import { Linkedin } from "lucide-react";
-import { SiGithub, SiX } from "react-icons/si";
-import { CaseGlyph, DocGlyph, FinderGlyph, FolderGlyph, MailGlyph, NotesGlyph, TrophyGlyph } from "./glyphs";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
+import { GithubIcon, LinkedinIcon, TwitterIcon, WorkIcon } from "./asset-icons";
+import { TrophyGlyph } from "./glyphs";
 import type { Tone } from "./app-icon";
 
 type DockItem = {
   label: string;
-  icon: React.ReactNode;
-  tone: Tone;
+  /** Real macOS-style app icon from public/mac-assets. */
+  image?: string;
+  /** Fallback: monochrome glyph on a tinted tile. */
+  icon?: React.ReactNode;
+  tone?: Tone;
   href?: string;
   external?: string;
   download?: boolean;
+  /** Nothing to empty — shakes and buzzes instead. */
+  refuse?: boolean;
 };
 
 const tones: Record<Tone, string> = {
@@ -34,16 +39,17 @@ const tones: Record<Tone, string> = {
 };
 
 const items: DockItem[] = [
-  { label: "Home", icon: <FinderGlyph size={20} />, tone: "blue", href: "/" },
-  { label: "Projects", icon: <FolderGlyph size={20} />, tone: "teal", href: "/projects" },
-  { label: "Experience", icon: <CaseGlyph size={19} />, tone: "indigo", href: "/experience" },
+  { label: "Home", image: "/mac-assets/images/finder.png", href: "/" },
+  { label: "Projects", image: "/mac-assets/images/folder.png", href: "/projects" },
+  { label: "Experience", icon: <WorkIcon size={19} />, tone: "indigo", href: "/experience" },
   { label: "Achievements", icon: <TrophyGlyph size={19} />, tone: "orange", href: "/achievements" },
-  { label: "Blog", icon: <NotesGlyph size={19} />, tone: "yellow", href: "/blog" },
-  { label: "Mail", icon: <MailGlyph size={19} />, tone: "blue", external: "mailto:gsomil93@gmail.com" },
-  { label: "GitHub", icon: <SiGithub size={17} />, tone: "graphite", external: "https://github.com/Somilg11" },
-  { label: "LinkedIn", icon: <Linkedin size={18} />, tone: "blue", external: "https://www.linkedin.com/in/somil-1101s/" },
-  { label: "X", icon: <SiX size={15} />, tone: "graphite", external: "https://x.com/somil_1101" },
-  { label: "Resume", icon: <DocGlyph size={19} />, tone: "red", download: true },
+  { label: "Blog", image: "/mac-assets/images/safari.png", href: "/blog" },
+  { label: "Contact", image: "/mac-assets/images/contact.png", external: "mailto:gsomil93@gmail.com" },
+  { label: "GitHub", icon: <GithubIcon size={19} />, tone: "graphite", external: "https://github.com/Somilg11" },
+  { label: "LinkedIn", icon: <LinkedinIcon size={19} />, tone: "blue", external: "https://www.linkedin.com/in/somil-1101s/" },
+  { label: "X", icon: <TwitterIcon size={17} />, tone: "graphite", external: "https://x.com/somil_1101" },
+  { label: "Resume", image: "/mac-assets/images/pdf.png", download: true },
+  { label: "Trash", image: "/mac-assets/images/trash-160.png", refuse: true },
 ];
 
 function useCompactDock() {
@@ -68,6 +74,7 @@ export function Dock() {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center pb-2">
       <motion.nav
+        aria-label="Dock"
         onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(Infinity)}
         initial={{ y: 70, opacity: 0 }}
@@ -82,7 +89,7 @@ export function Dock() {
             mouseX={mouseX}
             compact={compact}
             active={!!item.href && (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href))}
-            separatorBefore={i === 6}
+            separatorBefore={i === 6 || i === 10}
           />
         ))}
       </motion.nav>
@@ -106,6 +113,7 @@ function DockIcon({
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
   const [bouncing, setBouncing] = useState(false);
+  const [shaking, setShaking] = useState(false);
   const { play } = useSound();
 
   const distance = useTransform(mouseX, (x) => {
@@ -120,9 +128,17 @@ function DockIcon({
   const radius = useTransform(size, (s) => s * 0.27);
 
   const launch = () => {
+    if (item.refuse) {
+      play("error");
+      setShaking(true);
+      window.setTimeout(() => setShaking(false), 400);
+      return;
+    }
+
     play("pop");
     setBouncing(true);
     window.setTimeout(() => setBouncing(false), 700);
+
     if (item.download) {
       const a = document.createElement("a");
       a.href = "/resume.pdf";
@@ -134,19 +150,34 @@ function DockIcon({
   const tile = (
     <motion.div
       ref={ref}
-      style={{ width: size, height: size, borderRadius: radius }}
+      style={item.image ? { width: size, height: size } : { width: size, height: size, borderRadius: radius }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={launch}
       className={cn(
         "relative flex shrink-0 cursor-pointer items-center justify-center text-white",
-        "shadow-[0_1px_2px_rgba(0,0,0,0.2)] ring-1 ring-inset ring-black/[0.06] dark:ring-white/[0.08]",
-        tones[item.tone],
-        item.tone === "yellow" && "text-black/80",
-        bouncing && "animate-dock-bounce"
+        !item.image && [
+          "shadow-[0_1px_2px_rgba(0,0,0,0.2)] ring-1 ring-inset ring-black/[0.06] dark:ring-white/[0.08]",
+          item.tone && tones[item.tone],
+          item.tone === "yellow" && "text-black/80",
+        ],
+        bouncing && "animate-dock-bounce",
+        shaking && "mac-shake"
       )}
     >
-      {item.icon}
+      {item.image ? (
+        <img
+          src={item.image}
+          alt=""
+          width={58}
+          height={58}
+          draggable={false}
+          decoding="async"
+          className="h-full w-full select-none object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
+        />
+      ) : (
+        item.icon
+      )}
 
       {active && (
         <span className="absolute -bottom-[6px] left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-foreground/55" />
