@@ -22,21 +22,26 @@ type Result = {
 };
 
 /** ⌘K Spotlight: navigation, project lookup and system actions. */
-export function Spotlight() {
-  const [open, setOpen] = useState(false);
+export function SpotlightPalette({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [query, setQuery] = useState("");
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { open: openWindow, closeAll, posts, close: closeWindow, toggleMinimize, focused } = useWindows();
+  const { open: openWindow, closeAll, posts } = useWindows();
   const { setTheme, resolvedTheme } = useTheme();
   const { play, enabled: soundOn, setEnabled: setSoundOn } = useSound();
 
   const close = useCallback(() => {
-    setOpen(false);
+    onOpenChange(false);
     setQuery("");
     setCursor(0);
-  }, []);
+  }, [onOpenChange]);
 
   const results = useMemo<Result[]>(() => {
     const openApp = (id: Parameters<typeof openWindow>[0]) => () => {
@@ -143,70 +148,6 @@ export function Spotlight() {
     const q = query.toLowerCase();
     return all.filter((r) => r.label.toLowerCase().includes(q) || r.group.toLowerCase().includes(q));
   }, [query, play, close, resolvedTheme, setTheme, soundOn, setSoundOn, openWindow, closeAll, posts]);
-
-  // Global shortcuts: ⌘K opens, ⌘1–5 navigate, ⌘S grabs the resume.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const meta = e.metaKey || e.ctrlKey;
-
-      if (meta && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        play(open ? "close" : "open");
-        setOpen((v) => !v);
-        return;
-      }
-
-      if (meta && ["1", "2", "3", "4", "5"].includes(e.key)) {
-        e.preventDefault();
-        if (e.key === "1") {
-          closeAll();
-          return;
-        }
-        const apps = ["projects", "experience", "achievements", "blog"] as const;
-        openWindow(apps[Number(e.key) - 2]);
-        return;
-      }
-
-      if (meta && e.key.toLowerCase() === "w" && focused) {
-        e.preventDefault();
-        closeWindow(focused);
-        return;
-      }
-
-      if (meta && e.key.toLowerCase() === "m" && focused) {
-        e.preventDefault();
-        toggleMinimize(focused);
-        return;
-      }
-
-      if (meta && e.key.toLowerCase() === "h" && e.altKey) {
-        e.preventDefault();
-        closeAll();
-        return;
-      }
-
-      if (meta && e.key.toLowerCase() === "s") {
-        e.preventDefault();
-        const a = document.createElement("a");
-        a.href = "/resume.pdf";
-        a.download = "Somil_Gupta_Resume.pdf";
-        a.click();
-        play("success");
-      }
-    };
-
-    const onSpotlight = () => {
-      play("open");
-      setOpen(true);
-    };
-
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("mac:spotlight", onSpotlight);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("mac:spotlight", onSpotlight);
-    };
-  }, [open, play, openWindow, closeAll, closeWindow, toggleMinimize, focused]);
 
   useEffect(() => {
     if (open) window.setTimeout(() => inputRef.current?.focus(), 40);

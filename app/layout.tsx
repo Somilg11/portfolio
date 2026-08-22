@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SoundProvider } from "@/components/sound-provider";
 import { MenuBar } from "@/components/mac/menu-bar";
 import { Dock } from "@/components/mac/dock";
-import { Spotlight } from "@/components/mac/spotlight";
+import { Spotlight } from "@/components/mac/spotlight-host";
 import { WindowProvider } from "@/components/windows/window-manager";
 import { WindowLayer } from "@/components/windows/window-layer";
 import { getPosts } from "@/lib/posts";

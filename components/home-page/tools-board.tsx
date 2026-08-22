@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "next-themes";
 import { GitBranch } from "lucide-react";
 import { SiClaudecode, SiDiscord, SiGithub, SiNotion, SiOpencode, SiPostman } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
@@ -32,9 +31,11 @@ const stats = [
   { label: "Internships", value: "2" },
 ];
 
+// One fixed chart colour, inverted in dark mode — a theme-dependent URL made
+// the browser fetch the graph twice (once per theme) on every load.
+const CHART_SRC = "https://ghchart.rshah.org/0a7cff/Somilg11";
+
 export default function ToolsBoard() {
-  const { resolvedTheme } = useTheme();
-  const chartColor = resolvedTheme === "dark" ? "30d158" : "0a7cff";
 
   return (
     <MacWindow title="Desk" className="h-full" bodyClassName="p-0" delay={0.2}>
@@ -108,7 +109,7 @@ export default function ToolsBoard() {
               </div>
               <div className="min-w-0 overflow-hidden">
                 <img
-                  src={`https://ghchart.rshah.org/${chartColor}/Somilg11`}
+                  src={CHART_SRC}
                   alt="GitHub contribution graph for Somilg11"
                   width={720}
                   height={110}

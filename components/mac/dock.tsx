@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSound } from "@/components/sound-provider";
@@ -189,13 +189,12 @@ function DockIcon({
       )}
     >
       {item.image ? (
-        <img
+        <Image
           src={item.image}
           alt=""
-          width={58}
-          height={58}
+          width={64}
+          height={64}
           draggable={false}
-          decoding="async"
           className="h-full w-full select-none rounded-[23%] object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
         />
       ) : (

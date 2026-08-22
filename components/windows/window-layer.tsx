@@ -1,18 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { AnimatePresence } from "framer-motion";
 import { Check, Github } from "lucide-react";
 import { ShareIcon } from "@/components/mac/asset-icons";
 import { AppWindow } from "./app-window";
 import { useWindows } from "./window-manager";
 import type { WindowState } from "./types";
-import { ProjectsApp } from "@/components/apps/projects-app";
-import { ExperienceApp } from "@/components/apps/experience-app";
-import { AchievementsApp } from "@/components/apps/achievements-app";
-import { BlogApp } from "@/components/apps/blog-app";
-import { PostApp } from "@/components/apps/post-app";
-import { ShortcutsApp } from "@/components/apps/shortcuts-app";
+// Each app is its own chunk: the desktop ships none of them until a window
+// opens, and a deep link still server-renders the one it needs.
+const ProjectsApp = dynamic(() => import("@/components/apps/projects-app").then((m) => m.ProjectsApp));
+const ExperienceApp = dynamic(() => import("@/components/apps/experience-app").then((m) => m.ExperienceApp));
+const AchievementsApp = dynamic(() => import("@/components/apps/achievements-app").then((m) => m.AchievementsApp));
+const BlogApp = dynamic(() => import("@/components/apps/blog-app").then((m) => m.BlogApp));
+const PostApp = dynamic(() => import("@/components/apps/post-app").then((m) => m.PostApp));
+const ShortcutsApp = dynamic(() => import("@/components/apps/shortcuts-app").then((m) => m.ShortcutsApp));
 import { useSound } from "@/components/sound-provider";
 
 /** Renders every open window above the desktop. */

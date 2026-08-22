@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { TrafficLights } from "./traffic-lights";
@@ -19,7 +19,7 @@ const overview: [string, string][] = [
 
 const hardware: [string, string][] = [
   ["Machine", "MacBook Air M3"],
-  ["Memory", "16 GB unified"],
+  ["Memory", "8 GB unified"],
   ["Storage", "512 GB SSD"],
   ["Also", "Snapdragon 7s Gen 2 · Dimensity 7000"],
   ["Shell", "zsh · Arch on WSL"],
@@ -71,9 +71,11 @@ export function AboutDialog({ open, onOpenChange }: { open: boolean; onOpenChang
           </header>
 
           <div className="flex flex-col items-center px-6 pb-5 pt-5 text-center">
-            <img
+            <Image
               src="/myprofileimage.png"
               alt="Somil"
+              width={80}
+              height={80}
               className="h-20 w-20 rounded-[18px] object-cover ring-1 ring-black/10 dark:ring-white/10"
             />
             <h2 className="mt-3 text-[19px] font-semibold tracking-tight">somil</h2>

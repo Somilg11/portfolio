@@ -36,12 +36,21 @@ export function AppWindow({
   // Geometry is measured on the client, so the first render must match the
   // server's markup exactly — until then the window renders as a centred sheet.
   const [mounted, setMounted] = useState(false);
+  const [animatingGeometry, setAnimatingGeometry] = useState(false);
   const dragState = useRef<{ dx: number; dy: number } | null>(null);
   const resizeState = useRef<{ x: number; y: number; w: number; h: number } | null>(null);
 
   const isFocused = focused === state.id;
 
   useEffect(() => setMounted(true), []);
+
+  // Zoom moves and resizes the window at once; let CSS ease it instead of
+  // snapping, and drop the transition again so dragging stays 1:1.
+  const handleZoom = useCallback(() => {
+    setAnimatingGeometry(true);
+    toggleMaximize(state.id);
+    window.setTimeout(() => setAnimatingGeometry(false), 420);
+  }, [toggleMaximize, state.id]);
 
   /** Vector from the window's centre to its dock icon. */
   const aimAtDock = useCallback(() => {
@@ -164,6 +173,8 @@ export function AppWindow({
       }
       className={cn(
         "mac-window fixed flex flex-col overflow-hidden",
+        animatingGeometry &&
+          "transition-[left,top,width,height] duration-[380ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
         // Pre-hydration fallback: a centred sheet that fits any viewport.
         !mounted && "inset-x-3 top-10 bottom-24 mx-auto max-w-[980px]",
         isFocused ? "mac-window-focused" : "opacity-[0.99]"
@@ -176,7 +187,7 @@ export function AppWindow({
         onPointerCancel={endDrag}
         onDoubleClick={() => {
           play("pop");
-          toggleMaximize(state.id);
+          handleZoom();
         }}
         className={cn(
           "mac-titlebar relative flex h-10 shrink-0 select-none items-center gap-2 px-2.5",
@@ -186,7 +197,7 @@ export function AppWindow({
         <TrafficLights
           onClose={() => close(state.id)}
           onMinimize={handleMinimize}
-          onZoom={() => toggleMaximize(state.id)}
+          onZoom={handleZoom}
         />
 
         <div className="pointer-events-none absolute inset-x-0 flex flex-col items-center leading-tight">

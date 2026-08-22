@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Flat system tints — one solid colour per app, tuned per appearance. */
@@ -56,14 +57,12 @@ export function AssetIcon({
   alt?: string;
 }) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={src}
       alt={alt}
       width={size}
       height={size}
       draggable={false}
-      decoding="async"
       style={{ width: size, height: size }}
       // Squircle-ish corners so square artwork sits with the system icons.
       className={cn(
