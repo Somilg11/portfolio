@@ -4,6 +4,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState, useEf
 import { usePathname } from "next/navigation";
 import type { Post } from "@/lib/posts";
 import { useSound } from "@/components/sound-provider";
+import { getProject } from "@/data/projects";
 import {
   pathForWindow,
   windowForPath,
@@ -36,7 +37,11 @@ function defaultRect(id: WindowId, index: number) {
     blog: { w: 820, h: 580 },
     shortcuts: { w: 460, h: 430 },
   };
-  const preset = id.startsWith("post:") ? { w: 800, h: 640 } : sizes[id] ?? { w: 860, h: 600 };
+  const preset = id.startsWith("post:")
+    ? { w: 800, h: 640 }
+    : id.startsWith("project:")
+      ? { w: 880, h: 660 }
+      : sizes[id] ?? { w: 860, h: 600 };
 
   if (compact) {
     // Phones: near-fullscreen sheets, no cascade.
@@ -59,6 +64,9 @@ function titleFor(id: WindowId, posts: Post[]): { title: string; subtitle?: stri
   if (id.startsWith("post:")) {
     const post = posts.find((p) => p.slug === id.slice(5));
     return { title: post?.title ?? "Note", subtitle: "Blog" };
+  }
+  if (id.startsWith("project:")) {
+    return { title: getProject(id.slice(8))?.title ?? "Project", subtitle: "Projects" };
   }
   switch (id) {
     case "projects":

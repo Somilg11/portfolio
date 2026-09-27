@@ -6,7 +6,8 @@ export type WindowId =
   | "achievements"
   | "blog"
   | "shortcuts"
-  | `post:${string}`;
+  | `post:${string}`
+  | `project:${string}`;
 
 export type WindowRect = { x: number; y: number; w: number; h: number };
 
@@ -40,6 +41,7 @@ export type WindowsContextValue = {
 /** Path each window maps to, so the address bar and deep links stay in sync. */
 export function pathForWindow(id: WindowId): string {
   if (id.startsWith("post:")) return `/blog/${id.slice(5)}`;
+  if (id.startsWith("project:")) return `/projects/${id.slice(8)}`;
   if (id === "shortcuts") return "/";
   return `/${id}`;
 }
@@ -51,5 +53,6 @@ export function windowForPath(pathname: string): WindowId | null {
   if (clean === "/achievements") return "achievements";
   if (clean === "/blog") return "blog";
   if (clean.startsWith("/blog/")) return `post:${clean.slice("/blog/".length)}`;
+  if (clean.startsWith("/projects/")) return `project:${clean.slice("/projects/".length)}`;
   return null;
 }

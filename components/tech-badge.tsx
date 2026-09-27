@@ -7,7 +7,8 @@ import {
   SiNpm, SiCloudflare, SiDocker, SiPostgresql, SiPrisma, 
   SiMongodb, SiRedis, SiCplusplus, SiPython, SiGo, SiJavascript,
   SiTypescript, SiStreamlit, SiShadcnui, SiVercel, SiFigma, SiNestjs,
-  SiOpencv, SiOnnx
+  SiOpencv, SiOnnx, SiRust, SiBun, SiHono, SiDrizzle, SiReactquery, SiTurborepo,
+  SiZod, SiOpenapiinitiative
 } from "react-icons/si";
 import { FaAws as SiAmazonaws } from "react-icons/fa";
 import { VscTerminal } from "react-icons/vsc";
@@ -55,6 +56,18 @@ const iconMap: Record<string, React.ReactNode> = {
   "RBAC": <VscTerminal size={18} className="text-muted-foreground" />,
   "OCR": <VscTerminal size={18} className="text-muted-foreground" />,
   "REST APIs": <VscTerminal size={18} className="text-muted-foreground" />,
+  "Rust": <SiRust size={18} className="text-orange-600" />,
+  "NAPI-RS": <SiRust size={18} className="text-orange-600" />,
+  "Axum": <SiRust size={18} className="text-orange-600" />,
+  "Bun": <SiBun size={18} className="text-foreground" />,
+  "Hono": <SiHono size={18} className="text-orange-500" />,
+  "Drizzle": <SiDrizzle size={18} className="text-lime-500" />,
+  "TanStack Query": <SiReactquery size={18} className="text-red-500" />,
+  "Turborepo": <SiTurborepo size={18} className="text-pink-500" />,
+  "Zod": <SiZod size={18} className="text-blue-600" />,
+  "OpenAPI": <SiOpenapiinitiative size={18} className="text-lime-600" />,
+  "AI SDK": <SiVercel size={18} className="text-foreground" />,
+  "React Flow": <SiReact size={18} className="text-pink-500" />,
 };
 
 export const TechBadge = ({ tech, showName }: { tech: string; showName?: boolean }) => {

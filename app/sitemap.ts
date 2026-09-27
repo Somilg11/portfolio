@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "./robots";
+import { projects } from "@/data/projects";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes: MetadataRoute.Sitemap = [
@@ -24,5 +25,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  return [...routes, ...posts];
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${SITE_URL}/projects/${project.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...routes, ...projectRoutes, ...posts];
 }

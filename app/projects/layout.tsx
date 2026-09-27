@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { projectData } from "@/data/projectData";
+import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: `A library of ${projectData.length} projects by Somil Gupta — web apps, AI tools and systems work built with Next.js, NestJS, Python and Rust.`,
+  description: `${projects.length} projects by Somil Gupta — storage engines, payment and ledger backends, web frameworks and full-stack products built with TypeScript, Rust, C++ and Python.`,
   alternates: { canonical: "/projects" },
   openGraph: {
     title: "Projects — Somil Gupta",
-    description: `A library of ${projectData.length} web, AI and systems projects.`,
+    description: `${projects.length} systems, backend and product projects.`,
     url: "/projects",
     type: "website",
   },

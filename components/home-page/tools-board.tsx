@@ -8,7 +8,7 @@ import { VscVscode } from "react-icons/vsc";
 import { MacWindow } from "@/components/mac/window";
 import DotField from "@/components/home-page/dot-field";
 import { AppIcon, AssetIcon, type Tone } from "@/components/mac/app-icon";
-import { projectData } from "@/data/projectData";
+import { projects } from "@/data/projects";
 import { useWindows } from "@/components/windows/window-manager";
 import type { WindowId } from "@/components/windows/types";
 
@@ -25,7 +25,7 @@ const rail: RailItem[] = [
 ];
 
 const stats = [
-  { label: "Projects", value: String(projectData.length) },
+  { label: "Projects", value: String(projects.length) },
   { label: "Commits / yr", value: "779" },
   { label: "Hackathons", value: "6+" },
   { label: "Internships", value: "2" },

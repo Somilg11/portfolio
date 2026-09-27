@@ -7,13 +7,14 @@ import { Check, Github } from "lucide-react";
 import { ShareIcon } from "@/components/mac/asset-icons";
 import { AppWindow } from "./app-window";
 import { useWindows } from "./window-manager";
-import type { WindowState } from "./types";
+import { pathForWindow, type WindowState } from "./types";
 // Each app is its own chunk: the desktop ships none of them until a window
 // opens, and a deep link still server-renders the one it needs.
 const ProjectsApp = dynamic(() => import("@/components/apps/projects-app").then((m) => m.ProjectsApp));
 const ExperienceApp = dynamic(() => import("@/components/apps/experience-app").then((m) => m.ExperienceApp));
 const AchievementsApp = dynamic(() => import("@/components/apps/achievements-app").then((m) => m.AchievementsApp));
 const BlogApp = dynamic(() => import("@/components/apps/blog-app").then((m) => m.BlogApp));
+const ProjectApp = dynamic(() => import("@/components/apps/project-app").then((m) => m.ProjectApp));
 const PostApp = dynamic(() => import("@/components/apps/post-app").then((m) => m.PostApp));
 const ShortcutsApp = dynamic(() => import("@/components/apps/shortcuts-app").then((m) => m.ShortcutsApp));
 import { useSound } from "@/components/sound-provider";
@@ -35,6 +36,7 @@ export function WindowLayer() {
 
 function WindowContent({ state }: { state: WindowState }) {
   if (state.id.startsWith("post:")) return <PostApp slug={state.id.slice(5)} />;
+  if (state.id.startsWith("project:")) return <ProjectApp slug={state.id.slice(8)} />;
 
   switch (state.id) {
     case "projects":
@@ -62,14 +64,14 @@ function Toolbar({ state }: { state: WindowState }) {
     return () => window.clearTimeout(id);
   }, [copied]);
 
-  if (state.id.startsWith("post:")) {
+  if (state.id.startsWith("post:") || state.id.startsWith("project:")) {
     return (
       <button
         type="button"
         data-sound="none"
         onClick={async () => {
           try {
-            await navigator.clipboard.writeText(`${window.location.origin}/blog/${state.id.slice(5)}`);
+            await navigator.clipboard.writeText(`${window.location.origin}${pathForWindow(state.id)}`);
             play("success");
             setCopied(true);
           } catch {

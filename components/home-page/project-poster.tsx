@@ -4,12 +4,12 @@ import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import { MacWindow } from "@/components/mac/window";
 import { AssetIcon } from "@/components/mac/app-icon";
-import { projectData } from "@/data/projectData";
+import { projects } from "@/data/projects";
 import { useWindows } from "@/components/windows/window-manager";
 
 export default function ProjectPoster() {
   const { open } = useWindows();
-  const recent = [...projectData].reverse().slice(0, 3);
+  const recent = projects.slice(0, 3);
 
   return (
     <MacWindow title="Projects" onZoom={() => open("projects")} className="w-full" bodyClassName="p-2.5" delay={0.15}>
@@ -23,7 +23,7 @@ export default function ProjectPoster() {
         <div className="min-w-0 flex-1">
           <div className="text-[14px] font-medium leading-tight">Project Library</div>
           <div className="text-[11.5px] leading-tight text-muted-foreground">
-            {projectData.length} items · web, AI, core
+            {projects.length} items · systems, backend, product
           </div>
         </div>
         <ArrowUpRight
@@ -36,11 +36,11 @@ export default function ProjectPoster() {
 
       <ul className="space-y-0.5">
         {recent.map((project) => (
-          <li key={project.title}>
+          <li key={project.slug}>
             <button
               type="button"
               data-sound="tick"
-              onClick={() => open("projects")}
+              onClick={() => open(`project:${project.slug}`)}
               className="flex w-full items-center gap-2 rounded-[6px] px-1.5 py-1 text-left transition-colors duration-150 hover:bg-foreground/[0.05]"
             >
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary/60" />

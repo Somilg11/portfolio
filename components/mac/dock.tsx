@@ -46,7 +46,7 @@ const items: DockItem[] = [
   { label: "Experience", image: "/mac-assets/images/experience.png", window: "experience" },
   { label: "Achievements", image: "/mac-assets/images/achievement.png", window: "achievements" },
   { label: "Blog", image: "/mac-assets/images/blog.png", window: "blog" },
-  { label: "Mail", image: "/mac-assets/images/mail.png", external: "mailto:gsomil93@gmail.com" },
+  { label: "Mail", image: "/mac-assets/images/chat.png", external: "mailto:gsomil93@gmail.com" },
   { label: "GitHub", icon: <GithubIcon size={19} />, tone: "graphite", external: "https://github.com/Somilg11" },
   { label: "LinkedIn", icon: <LinkedinIcon size={19} />, tone: "blue", external: "https://www.linkedin.com/in/somil-1101s/" },
   { label: "X", icon: <TwitterIcon size={17} />, tone: "graphite", external: "https://x.com/somil_1101" },

@@ -12,7 +12,7 @@ type Tile = { href: string; label: string; tone?: Tone; icon?: React.ReactNode; 
 const tiles: Tile[] = [
   { href: "https://github.com/Somilg11", label: "GitHub", tone: "graphite", icon: <GithubIcon size={19} /> },
   { href: "https://x.com/somil_1101", label: "X", tone: "graphite", icon: <TwitterIcon size={17} /> },
-  { href: "mailto:gsomil93@gmail.com", label: "Mail", image: "/mac-assets/images/mail.png" },
+  { href: "mailto:gsomil93@gmail.com", label: "Mail", image: "/mac-assets/images/chat.png" },
   { href: "https://discord.com/kakashi_11_", label: "Discord", tone: "indigo", icon: <SiDiscord size={15} /> },
   { href: "https://www.linkedin.com/in/somil-1101s/", label: "LinkedIn", tone: "blue", icon: <LinkedinIcon size={19} /> },
   { href: "https://codolio.com/profile/strangecodes", label: "Codolio", tone: "teal", icon: <ContactGlyph size={19} /> },
