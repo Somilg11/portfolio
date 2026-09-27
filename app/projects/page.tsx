@@ -1,7 +1,7 @@
 import React from "react";
 import { getPosts } from "@/lib/posts";
 import { HomeBento } from "@/components/home-page/home-bento";
-import { projectData } from "@/data/projectData";
+import { projects } from "@/data/projects";
 import { SITE_URL } from "@/app/robots";
 
 export default async function Page() {
@@ -11,13 +11,13 @@ export default async function Page() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Projects by Somil Gupta",
-    numberOfItems: projectData.length,
-    itemListElement: [...projectData].reverse().map((project, i) => ({
+    numberOfItems: projects.length,
+    itemListElement: projects.map((project, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: project.title,
-      description: project.description,
-      url: project.live || project.url,
+      description: project.tagline,
+      url: `${SITE_URL}/projects/${project.slug}`,
     })),
   };
 

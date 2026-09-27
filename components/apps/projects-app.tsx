@@ -4,35 +4,34 @@ import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, Github, LayoutGrid, List } from "lucide-react";
-import { projectData } from "@/data/projectData";
+import { categoryLabels, projects, type ProjectCategory } from "@/data/projects";
 import { SearchIcon } from "@/components/mac/asset-icons";
 import { TechBadge } from "@/components/tech-badge";
+import { useWindows } from "@/components/windows/window-manager";
 import { cn } from "@/lib/utils";
 
-const categories = [
+const categories: { key: "all" | ProjectCategory; label: string }[] = [
   { key: "all", label: "All" },
-  { key: "web", label: "Web" },
-  { key: "ai", label: "AI" },
-  { key: "hackathon", label: "Hackathon" },
-  { key: "core", label: "Core" },
+  ...(Object.keys(categoryLabels) as ProjectCategory[]).map((key) => ({ key, label: categoryLabels[key] })),
 ];
 
 export function ProjectsApp() {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState<"all" | ProjectCategory>("all");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const { open } = useWindows();
 
-  const filtered = useMemo(
-    () =>
-      [...projectData].reverse().filter((project) => {
-        const cats = Array.isArray(project.category) ? project.category : [project.category];
-        return (
-          (category === "all" || cats.includes(category)) &&
-          project.title.toLowerCase().includes(query.toLowerCase())
-        );
-      }),
-    [query, category]
-  );
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return projects.filter(
+      (project) =>
+        (category === "all" || project.categories.includes(category)) &&
+        (!q ||
+          project.title.toLowerCase().includes(q) ||
+          project.tagline.toLowerCase().includes(q) ||
+          project.stack.some((tech) => tech.toLowerCase().includes(q)))
+    );
+  }, [query, category]);
 
   return (
     <div className="flex min-h-full flex-col">
@@ -112,34 +111,41 @@ export function ProjectsApp() {
               {filtered.map((project, index) =>
                 view === "grid" ? (
                   <motion.article
-                    key={project.title}
+                    key={project.slug}
                     layout
                     initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.97 }}
                     transition={{ delay: Math.min(index * 0.025, 0.2), duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-                    className="group flex flex-col overflow-hidden rounded-mac border border-border bg-background/40 transition-colors duration-200 hover:bg-foreground/[0.03]"
+                    className="group relative flex flex-col overflow-hidden rounded-mac border border-border bg-background/40 transition-colors duration-200 hover:bg-foreground/[0.03]"
                   >
-                    <Thumb src={project.image} title={project.title} />
+                    <Thumb src={project.cover} title={project.title} />
 
                     <div className="flex flex-1 flex-col p-3">
-                      <h2 className="text-[14.5px] font-semibold tracking-tight">{project.title}</h2>
+                      <h2 className="text-[14.5px] font-semibold tracking-tight">
+                        <button
+                          type="button"
+                          data-sound="none"
+                          onClick={() => open(`project:${project.slug}`)}
+                          className="mac-focus text-left after:absolute after:inset-0 after:content-['']"
+                        >
+                          {project.title}
+                        </button>
+                      </h2>
                       <p className="mt-1 line-clamp-2 text-[12.5px] leading-relaxed text-muted-foreground">
-                        {project.description}
+                        {project.tagline}
                       </p>
 
                       <div className="mt-2.5 flex flex-wrap gap-1.5">
-                        {project.tech?.slice(0, 4).map((tech: string, i: number) => (
-                          <TechBadge key={`${tech}-${i}`} tech={tech} showName />
+                        {project.stack.slice(0, 4).map((tech) => (
+                          <TechBadge key={tech} tech={tech} showName />
                         ))}
                       </div>
 
-                      <div className="mt-auto flex items-center gap-2 pt-3">
-                        {project.url && (
-                          <a href={project.url} target="_blank" rel="noopener noreferrer" className="mac-button gap-1.5">
-                            <Github size={13} /> Code
-                          </a>
-                        )}
+                      <div className="relative z-10 mt-auto flex items-center gap-2 pt-3">
+                        <a href={project.repo} target="_blank" rel="noopener noreferrer" className="mac-button gap-1.5">
+                          <Github size={13} /> Code
+                        </a>
                         {project.live && (
                           <a
                             href={project.live}
@@ -155,25 +161,32 @@ export function ProjectsApp() {
                   </motion.article>
                 ) : (
                   <motion.article
-                    key={project.title}
+                    key={project.slug}
                     layout
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.22 }}
-                    className="flex items-center gap-3 rounded-mac border border-border bg-background/40 p-2.5 transition-colors hover:bg-foreground/[0.03]"
+                    className="relative flex items-center gap-3 rounded-mac border border-border bg-background/40 p-2.5 transition-colors hover:bg-foreground/[0.03]"
                   >
-                    <Thumb src={project.image} title={project.title} compact />
+                    <Thumb src={project.cover} title={project.title} compact />
                     <div className="min-w-0 flex-1">
-                      <h2 className="truncate text-[13.5px] font-semibold tracking-tight">{project.title}</h2>
-                      <p className="truncate text-[12px] text-muted-foreground">{project.description}</p>
+                      <h2 className="truncate text-[13.5px] font-semibold tracking-tight">
+                        <button
+                          type="button"
+                          data-sound="none"
+                          onClick={() => open(`project:${project.slug}`)}
+                          className="mac-focus text-left after:absolute after:inset-0 after:content-['']"
+                        >
+                          {project.title}
+                        </button>
+                      </h2>
+                      <p className="truncate text-[12px] text-muted-foreground">{project.tagline}</p>
                     </div>
-                    <div className="hidden shrink-0 items-center gap-2 sm:flex">
-                      {project.url && (
-                        <a href={project.url} target="_blank" rel="noopener noreferrer" className="mac-button" aria-label="Code">
-                          <Github size={13} />
-                        </a>
-                      )}
+                    <div className="relative z-10 hidden shrink-0 items-center gap-2 sm:flex">
+                      <a href={project.repo} target="_blank" rel="noopener noreferrer" className="mac-button" aria-label="Code">
+                        <Github size={13} />
+                      </a>
                       {project.live && (
                         <a
                           href={project.live}

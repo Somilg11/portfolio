@@ -7,7 +7,7 @@ import { Download, Volume2 } from "lucide-react";
 import { ModeIcon, SearchIcon } from "./asset-icons";
 import { AssetIcon } from "./app-icon";
 import { FinderGlyph } from "./glyphs";
-import { projectData } from "@/data/projectData";
+import { projects as projectList } from "@/data/projects";
 import { useSound } from "@/components/sound-provider";
 import { useWindows } from "@/components/windows/window-manager";
 import { cn } from "@/lib/utils";
@@ -68,17 +68,13 @@ export function SpotlightPalette({
       { id: "shortcuts", label: "Keyboard Shortcuts", hint: "Help", group: "Apps", icon: <FinderGlyph size={16} />, run: openApp("shortcuts") },
     ];
 
-    const projects: Result[] = projectData.map((project) => ({
-      id: `project-${project.title}`,
+    const projects: Result[] = projectList.map((project) => ({
+      id: `project-${project.slug}`,
       label: project.title,
       hint: "Project",
       group: "Projects",
       icon: <AssetIcon src="/mac-assets/images/projects.png" size={17} />,
-      run: () => {
-        play("swoosh");
-        window.open(project.live || project.url, "_blank", "noopener,noreferrer");
-        close();
-      },
+      run: openApp(`project:${project.slug}`),
     }));
 
     const notes: Result[] = posts.map((post) => ({
@@ -111,7 +107,7 @@ export function SpotlightPalette({
         label: "Email Somil",
         hint: "gsomil93@gmail.com",
         group: "Actions",
-        icon: <AssetIcon src="/mac-assets/images/mail.png" size={17} />,
+        icon: <AssetIcon src="/mac-assets/images/chat.png" size={17} />,
         run: () => {
           window.location.href = "mailto:gsomil93@gmail.com";
           close();
